@@ -1,0 +1,128 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// Usuario del sistema con autenticación
+model Usuario {
+  id            String   @id @default(cuid())
+  nombre        String
+  usuario       String   @unique
+  password      String
+  rol           String   @default("distribuidor") // admin, distribuidor, emprendedor, consumidor
+  dpi           String   @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  // Relación con registros (un usuario puede tener un registro)
+  registro      Registro?
+}
+
+// Registro completo de miembros Atomy
+model Registro {
+  id                  String   @id @default(cuid())
+  fecha               DateTime @default(now())
+  
+  // Datos del Patrocinador
+  patrocinadorNombre  String
+  patrocinadorCodigo  String
+  
+  // Datos Personales
+  nombres             String
+  apellidos           String
+  dpi                 String   @unique
+  nacimiento          String
+  telefono            String
+  email               String
+  direccion           String
+  pais                String
+  departamento        String
+  municipio           String
+  estadoCivil         String
+  tipoMembresia       String   // Consumidor, Distribuidor, Emprendedor
+  
+  // Datos del Cónyuge (opcional)
+  nombreConyuge       String?
+  dpiConyuge          String?
+  beneficiario        Boolean  @default(false)
+  
+  // Credenciales
+  usuario             String   @unique
+  password            String
+  
+  // Documentos
+  linkDPIFrente       String?
+  linkDPIReverso      String?
+  
+  // Redes sociales verificadas
+  facebookFollow      Boolean  @default(false)
+  whatsappJoin        Boolean  @default(false)
+  
+  // Estado
+  estado              String   @default("pendiente") // pendiente, activo, inactivo
+  
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  
+  // Relación con usuario
+  usuarioId           String?  @unique
+  usuarioRel          Usuario? @relation(fields: [usuarioId], references: [id])
+}
+
+// Catálogo de Productos
+model Producto {
+  id          String   @id @default(cuid())
+  categoria   String
+  badge       String
+  imagen      String
+  enlace      String?  // Enlace externo al producto
+  orden       Int      @default(0)
+  activo      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Catálogo de Videos
+model Video {
+  id          String   @id @default(cuid())
+  tipo        String   // institucional, testimonio
+  titulo      String
+  badge       String
+  url         String
+  descripcion String?
+  orden       Int      @default(0)
+  activo      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Mensajes del Chat con Astro AI
+model ChatMessage {
+  id          String   @id @default(cuid())
+  sessionId   String
+  role        String   // user, assistant
+  message     String
+  createdAt   DateTime @default(now())
+}
+
+// Experiencias/Testimonios de los socios
+model Experiencia {
+  id          String   @id @default(cuid())
+  usuarioId   String
+  titulo      String
+  experiencia String
+  producto    String?  // Producto relacionado (opcional)
+  calificacion Int     @default(5) // 1-5 estrellas
+  aprobado    Boolean  @default(false) // Para moderación de admin
+  destacado   Boolean  @default(false) // Para mostrar en homepage
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
