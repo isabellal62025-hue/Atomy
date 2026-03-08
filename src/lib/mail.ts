@@ -1,14 +1,19 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const apiKey = process.env.RESEND_API_KEY;
+const resend = apiKey ? new Resend(apiKey) : null;
 
 export async function sendWelcomeEmail(email: string, nombres: string, usuario: string, password: string) {
-    try {
-        const { data, error } = await resend.emails.send({
-            from: 'Atomy Registro <onboarding@resend.dev>', // Cambiar por dominio verificado en el futuro
-            to: [email],
-            subject: '¡Bienvenido a Atomy! Confirma tus credenciales',
-            html: `
+  if (!resend) {
+    console.warn('⚠️ No se puede enviar el correo: RESEND_API_KEY no configurada.');
+    return { success: false, error: 'API Key missing' };
+  }
+  try {
+    const { data, error } = await resend.emails.send({
+      from: 'Atomy Registro <onboarding@resend.dev>', // Cambiar por dominio verificado en el futuro
+      to: [email],
+      subject: '¡Bienvenido a Atomy! Confirma tus credenciales',
+      html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px;">
           <h1 style="color: #0891b2; text-align: center;">¡Bienvenido a la familia Atomy, ${nombres}!</h1>
           <p style="color: #475569; font-size: 16px; line-height: 1.5;">Estamos muy felices de que te hayas unido a nuestra comunidad. Tu registro ha sido procesado exitosamente y pronto un asesor activará tu cuenta.</p>
@@ -25,16 +30,16 @@ export async function sendWelcomeEmail(email: string, nombres: string, usuario: 
           <p style="text-align: center; color: #94a3b8; font-size: 12px;">© 2026 Atomy Guatemala - Registro de Miembros Gratuitos</p>
         </div>
       `,
-        });
+    });
 
-        if (error) {
-            console.error('Error al enviar correo:', error);
-            return { success: false, error };
-        }
-
-        return { success: true, data };
-    } catch (error) {
-        console.error('Error en servicio de correo:', error);
-        return { success: false, error };
+    if (error) {
+      console.error('Error al enviar correo:', error);
+      return { success: false, error };
     }
+
+    return { success: true, data };
+  } catch (error) {
+    console.error('Error en servicio de correo:', error);
+    return { success: false, error };
+  }
 }

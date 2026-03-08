@@ -48,8 +48,6 @@ export async function POST() {
       { tipo: 'testimonio', titulo: 'Marta Cabrera', badge: 'Diamond Master', url: 'https://drive.google.com/file/d/18md1mYEHfHJ0JIkbgHij_YyKHRjJYARn/view', descripcion: '', orden: 3 },
       { tipo: 'testimonio', titulo: 'Gustavo Zamora', badge: 'Líder Regional', url: 'https://drive.google.com/file/d/15NR8BQOyhDBhwdsQtSxGLEaBxPTwe6zS/view', descripcion: '', orden: 4 },
       { tipo: 'testimonio', titulo: 'Rosario Padilla', badge: 'Sales Master', url: 'https://drive.google.com/file/d/1nYDRn5ov0ZEjvlDs7BeoeF5x-gqsU2SP/view', descripcion: '', orden: 5 },
-      { tipo: 'testimonio', titulo: 'Laura Ávalos', badge: 'Star Master', url: 'https://drive.google.com/file/d/1Wno31AFrxA1j9jsEQbzu2_rY1u59tIqQ/view', descripcion: '', orden: 6 },
-      { tipo: 'testimonio', titulo: 'HemoHim', badge: 'Personal', url: 'https://drive.google.com/file/d/1dgOHB8dUoL5JbNrVwesIXm5Efyqw2pTc/view', descripcion: '', orden: 7 },
     ];
 
     // Eliminar y recrear solo videos
