@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { 
+import {
   ArrowLeft, Sparkles, Heart, HeartPulse, Home, ExternalLink,
   Check, Star, SparkleIcon, ArrowRight, Loader2
 } from 'lucide-react';
@@ -35,28 +35,32 @@ const categoriasConfig: Record<string, {
     icon: SparkleIcon,
     color: 'from-pink-500 to-rose-500',
     bgGradient: 'from-pink-500/20 via-rose-500/10 to-transparent',
-    descripcion: 'Descubre nuestra línea de belleza premium con tecnología coreana'
+    descripcion: 'Descubre nuestra línea de belleza premium con tecnología coreana',
+    shopUrl: 'https://us.atomy.com/product/beauty'
   },
   'cuidado-personal': {
     nombre: 'Cuidado Personal',
     icon: Heart,
     color: 'from-cyan-500 to-teal-500',
     bgGradient: 'from-cyan-500/20 via-teal-500/10 to-transparent',
-    descripcion: 'Productos de higiene personal de la más alta calidad'
+    descripcion: 'Productos de higiene personal de la más alta calidad',
+    shopUrl: 'https://us.atomy.com/product/personal-care'
   },
   'salud': {
     nombre: 'Salud',
     icon: HeartPulse,
     color: 'from-green-500 to-emerald-500',
     bgGradient: 'from-green-500/20 via-emerald-500/10 to-transparent',
-    descripcion: 'Suplementos nutricionales para tu bienestar diario'
+    descripcion: 'Suplementos nutricionales para tu bienestar diario',
+    shopUrl: 'https://us.atomy.com/product/health-care'
   },
   'hogar': {
     nombre: 'Hogar',
     icon: Home,
     color: 'from-amber-500 to-orange-500',
     bgGradient: 'from-amber-500/20 via-orange-500/10 to-transparent',
-    descripcion: 'Productos para el hogar y bienestar familiar'
+    descripcion: 'Productos para el hogar y bienestar familiar',
+    shopUrl: 'https://us.atomy.com/product/living'
   }
 };
 
@@ -68,10 +72,10 @@ function getProductoImagen(index: number, categoria: string): string {
     'salud': ['32CD32', '90EE90', '98FB98', '00FA9A', '00FF7F', '7CFC00'],
     'hogar': ['FFA500', 'FFD700', 'FF8C00', 'FF7F50', 'FF6347', 'FF4500']
   };
-  
+
   const colorSet = colores[categoria] || colores['belleza'];
   const color = colorSet[index % colorSet.length];
-  
+
   return `https://via.placeholder.com/400x300/${color}/FFFFFF?text=Producto+${index + 1}`;
 }
 
@@ -95,7 +99,7 @@ export default function ProductsCategoryPage({ categoryId, setCurrentView }: Pro
         setLoading(false);
       }
     }
-    
+
     fetchProductos();
   }, [categoryId]);
 
@@ -126,14 +130,14 @@ export default function ProductsCategoryPage({ categoryId, setCurrentView }: Pro
           <div className={`inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-r ${categoria.color} mb-6 shadow-lg`}>
             <IconComponent className="w-10 h-10 text-white" />
           </div>
-          
+
           <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
             Productos de{' '}
             <span className={`bg-gradient-to-r ${categoria.color} bg-clip-text text-transparent`}>
               {categoria.nombre}
             </span>
           </h1>
-          
+
           <p className="text-lg text-slate-400 max-w-2xl mx-auto">
             {categoria.descripcion}
           </p>
@@ -176,7 +180,7 @@ export default function ProductsCategoryPage({ categoryId, setCurrentView }: Pro
               >
                 {/* Glow effect on hover */}
                 <div className={`absolute -inset-0.5 bg-gradient-to-r ${categoria.color} rounded-2xl opacity-0 group-hover:opacity-20 blur transition-all duration-500`}></div>
-                
+
                 {/* Card */}
                 <div className="relative bg-slate-800/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-slate-700/50 hover:border-slate-600 transition-all duration-500 group-hover:-translate-y-1">
                   {/* Image */}
@@ -190,7 +194,7 @@ export default function ProductsCategoryPage({ categoryId, setCurrentView }: Pro
                       }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/20 to-transparent"></div>
-                    
+
                     {/* Badge */}
                     <div className="absolute top-3 left-3">
                       <Badge className={`bg-gradient-to-r ${categoria.color} text-white border-0 px-3 py-1 text-xs font-medium`}>
@@ -209,7 +213,7 @@ export default function ProductsCategoryPage({ categoryId, setCurrentView }: Pro
                     <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-cyan-300 transition-colors line-clamp-2">
                       {producto.badge}
                     </h3>
-                    
+
                     <div className="flex items-center justify-between">
                       <span className={`text-sm font-medium bg-gradient-to-r ${categoria.color} bg-clip-text text-transparent`}>
                         Ver producto
@@ -245,14 +249,30 @@ export default function ProductsCategoryPage({ categoryId, setCurrentView }: Pro
             <p className="text-slate-400 mb-4 text-sm">
               Regístrate gratis y accede a descuentos exclusivos para miembros.
             </p>
-            <Button
-              onClick={() => setCurrentView('registro')}
-              size="sm"
-              className="bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600"
-            >
-              <Sparkles className="w-4 h-4 mr-2" />
-              Registrarme Gratis
-            </Button>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Button
+                onClick={() => setCurrentView('registro')}
+                size="sm"
+                className="bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600"
+              >
+                <Sparkles className="w-4 h-4 mr-2" />
+                Registrarme Gratis
+              </Button>
+              <a
+                href={(categoria as any).shopUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="border-slate-600 text-slate-300 hover:text-white hover:bg-slate-700"
+                >
+                  <ExternalLink className="w-4 h-4 mr-2" />
+                  Tienda Oficial de {categoria.nombre}
+                </Button>
+              </a>
+            </div>
           </div>
         </div>
       </div>

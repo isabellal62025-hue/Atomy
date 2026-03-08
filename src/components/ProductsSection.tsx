@@ -16,7 +16,8 @@ const categorias = [
     color: 'from-pink-500 to-rose-500',
     bgColor: 'from-pink-500/10 to-rose-500/10',
     borderColor: 'border-pink-500/20 hover:border-pink-500/40',
-    imagen: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&q=80'
+    imagen: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&q=80',
+    shopUrl: 'https://us.atomy.com/product/beauty'
   },
   {
     id: 'cuidado-personal',
@@ -26,7 +27,8 @@ const categorias = [
     color: 'from-cyan-500 to-teal-500',
     bgColor: 'from-cyan-500/10 to-teal-500/10',
     borderColor: 'border-cyan-500/20 hover:border-cyan-500/40',
-    imagen: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=400&q=80'
+    imagen: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=400&q=80',
+    shopUrl: 'https://us.atomy.com/product/personal-care'
   },
   {
     id: 'salud',
@@ -36,7 +38,8 @@ const categorias = [
     color: 'from-green-500 to-emerald-500',
     bgColor: 'from-green-500/10 to-emerald-500/10',
     borderColor: 'border-green-500/20 hover:border-green-500/40',
-    imagen: 'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=400&q=80'
+    imagen: 'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=400&q=80',
+    shopUrl: 'https://us.atomy.com/product/health-care'
   },
   {
     id: 'hogar',
@@ -46,7 +49,8 @@ const categorias = [
     color: 'from-amber-500 to-orange-500',
     bgColor: 'from-amber-500/10 to-orange-500/10',
     borderColor: 'border-amber-500/20 hover:border-amber-500/40',
-    imagen: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&q=80'
+    imagen: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&q=80',
+    shopUrl: 'https://us.atomy.com/product/living'
   }
 ];
 
@@ -72,16 +76,16 @@ export default function ProductsSection({ setCurrentView, setProductCategory }: 
             <Sparkles className="w-4 h-4 text-cyan-400" />
             <span className="text-sm font-medium text-cyan-300">Catálogo Premium</span>
           </div>
-          
+
           <h2 className="text-4xl sm:text-5xl font-bold text-white mb-6">
             Nuestras{' '}
             <span className="bg-gradient-to-r from-cyan-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent">
               Categorías
             </span>
           </h2>
-          
+
           <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-            Explora nuestra amplia gama de productos organizados por categorías. 
+            Explora nuestra amplia gama de productos organizados por categorías.
             Calidad premium coreana al mejor precio.
           </p>
         </div>
@@ -97,7 +101,7 @@ export default function ProductsSection({ setCurrentView, setProductCategory }: 
             >
               {/* Glow effect on hover */}
               <div className={`absolute -inset-0.5 bg-gradient-to-r ${categoria.color} rounded-3xl opacity-0 group-hover:opacity-20 blur transition-all duration-500`}></div>
-              
+
               {/* Card */}
               <div className={`relative bg-gradient-to-b ${categoria.bgColor} rounded-3xl overflow-hidden border ${categoria.borderColor} transition-all duration-500 group-hover:-translate-y-2 h-full`}>
                 {/* Image Background */}
@@ -116,21 +120,32 @@ export default function ProductsSection({ setCurrentView, setProductCategory }: 
                   <div className={`w-20 h-20 rounded-2xl bg-gradient-to-r ${categoria.color} flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                     <categoria.icon className="w-10 h-10 text-white" />
                   </div>
-                  
+
                   {/* Title */}
                   <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-cyan-300 transition-colors">
                     {categoria.nombre}
                   </h3>
-                  
+
                   {/* Description */}
                   <p className="text-slate-400 text-sm mb-6 flex-grow">
                     {categoria.descripcion}
                   </p>
-                  
+
                   {/* CTA */}
-                  <div className="flex items-center gap-2 text-cyan-400 font-medium group-hover:gap-3 transition-all">
-                    <span>Ver productos</span>
-                    <ArrowRight className="w-4 h-4" />
+                  <div className="flex flex-col gap-3 w-full mt-auto">
+                    <div className="flex items-center justify-center gap-2 text-cyan-400 font-medium group-hover:gap-3 transition-all">
+                      <span>Catálogo Local</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </div>
+                    <a
+                      href={categoria.shopUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="text-[10px] text-slate-500 hover:text-cyan-400 transition-colors uppercase tracking-widest font-bold"
+                    >
+                      Ir a Tienda Oficial
+                    </a>
                   </div>
                 </div>
 

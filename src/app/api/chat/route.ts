@@ -92,8 +92,8 @@ ${isFirstMessage ? 'Preséntate brevemente como Astro, Consultor Atomy, y pregun
       response: response
     });
   } catch (error) {
-    console.error('Error en chat:', error);
-    
+    console.error('ERROR CRITICO: AstroChat API falló:', error);
+
     // Respuesta de fallback si hay error
     const fallbackResponses = [
       '¡Hola! Soy Astro, tu consultor Atomy. Estoy aquí para ayudarte a conocer más sobre nuestros productos y oportunidades de negocio. ¿En qué puedo ayudarte hoy? 😊',
@@ -102,11 +102,11 @@ ${isFirstMessage ? 'Preséntate brevemente como Astro, Consultor Atomy, y pregun
       'Nuestras categorías: HIGIENE PERSONAL (Eficiencia Total), CUIDADO DE LA PIEL (Tecnología Coreana), SUPLEMENTOS (Nutrición Avanzada) y BIENESTAR DIARIO.',
       'La clave del éxito en Atomy: 1) USA los productos personalmente, 2) COMPARTÉ tu testimonio real, 3) COMIENZA con tu círculo cercano. ¡Tus puntos nunca se pierden! 🚀'
     ];
-    
+
     return NextResponse.json({
       success: true,
-      response: isFirstMessage 
-        ? fallbackResponses[0] 
+      response: isFirstMessage
+        ? fallbackResponses[0]
         : fallbackResponses[Math.floor(Math.random() * (fallbackResponses.length - 1)) + 1]
     });
   }
