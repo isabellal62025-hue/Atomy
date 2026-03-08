@@ -17,17 +17,17 @@ async function seedAllProducts() {
     { categoria: 'Belleza', badge: 'Homme Skincare Set', imagen: '/productos/homme-skincare-set.jpg', enlace: 'https://us.atomy.com/product/A00749', orden: 6 },
 
     // CUIDADO PERSONAL (6 productos)
-    { categoria: 'Cuidado Personal', badge: 'Toothpaste', imagen: '/productos/toothpaste.svg', enlace: 'https://us.atomy.com/product/A00505', orden: 10 },
-    { categoria: 'Cuidado Personal', badge: 'Absolute Hair Care Set', imagen: '/productos/absolute-hair-care.svg', enlace: 'https://us.atomy.com/product/A00657', orden: 11 },
-    { categoria: 'Cuidado Personal', badge: 'Hair & Body Set', imagen: '/productos/hair-body-set.svg', enlace: 'https://us.atomy.com/product/A00655', orden: 12 },
-    { categoria: 'Cuidado Personal', badge: 'Scalpcare Set', imagen: '/productos/scalpcare-set.svg', enlace: 'https://us.atomy.com/product/A00693', orden: 13 },
-    { categoria: 'Cuidado Personal', badge: 'Scalpcare Conditioner', imagen: '/productos/scalpcare-conditioner.svg', enlace: 'https://us.atomy.com/product/A00692', orden: 14 },
-    { categoria: 'Cuidado Personal', badge: 'Sugar Body Scrub', imagen: '/productos/sugar-body-scrub.svg', enlace: 'https://us.atomy.com/product/A00488', orden: 15 },
+    { categoria: 'Cuidado Personal', badge: 'Toothpaste', imagen: '/productos/toothpaste.jpg', enlace: 'https://us.atomy.com/product/A00505', orden: 10 },
+    { categoria: 'Cuidado Personal', badge: 'Absolute Hair Care Set', imagen: '/productos/absolute-hair-care.jpg', enlace: 'https://us.atomy.com/product/A00657', orden: 11 },
+    { categoria: 'Cuidado Personal', badge: 'Hair & Body Set', imagen: '/productos/hair-body-set.jpg', enlace: 'https://us.atomy.com/product/A00655', orden: 12 },
+    { categoria: 'Cuidado Personal', badge: 'Scalpcare Set', imagen: '/productos/scalpcare-set.jpg', enlace: 'https://us.atomy.com/product/A00693', orden: 13 },
+    { categoria: 'Cuidado Personal', badge: 'Scalpcare Conditioner', imagen: '/productos/scalpcare-conditioner.jpg', enlace: 'https://us.atomy.com/product/A00692', orden: 14 },
+    { categoria: 'Cuidado Personal', badge: 'Sugar Body Scrub', imagen: '/productos/sugar-body-scrub.jpg', enlace: 'https://us.atomy.com/product/A00488', orden: 15 },
 
     // SALUD (6 productos con imágenes)
     { categoria: 'Salud', badge: 'HemoHIM PV Power-Up', imagen: '/productos/hemohim.jpg', enlace: 'https://us.atomy.com/product/A06629', orden: 20 },
     { categoria: 'Salud', badge: 'Health Care Best Kit', imagen: '/productos/health-care-kit.jpg', enlace: 'https://us.atomy.com/product/A06029', orden: 21 },
-    { categoria: 'Salud', badge: 'Organic Fermented Noni 6 Set', imagen: '/productos/organic-noni.svg', enlace: 'https://us.atomy.com/product/A06012', orden: 22 },
+    { categoria: 'Salud', badge: 'Organic Fermented Noni 6 Set', imagen: '/productos/organic-noni.jpg', enlace: 'https://us.atomy.com/product/A06012', orden: 22 },
     { categoria: 'Salud', badge: 'Vital Mega Vitamin C 2000', imagen: '/productos/vitamin-c.jpg', enlace: 'https://us.atomy.com/product/A04030', orden: 23 },
     { categoria: 'Salud', badge: 'rTG Omega 3', imagen: '/productos/omega-3.jpg', enlace: 'https://us.atomy.com/product/A04041', orden: 24 },
     { categoria: 'Salud', badge: 'US Probiotics', imagen: '/productos/probiotics.jpg', enlace: 'https://us.atomy.com/product/A04011', orden: 25 },
