@@ -79,15 +79,18 @@ export default function ExperienciasPage({ setCurrentView }: ExperienciasPagePro
       .then(res => res.json())
       .then(data => {
         if (data.success && data.experiencias && data.experiencias.length > 0) {
-          const formatted = data.experiencias.map((exp: Experiencia) => ({
+          const dynamicTestimonios = data.experiencias.map((exp: any) => ({
             name: exp.nombreUsuario || 'Usuario Atomy',
-            location: 'Miembro Atomy',
+            location: exp.ubicacion || 'Miembro Atomy',
             rating: exp.calificacion,
             text: exp.experiencia,
             product: exp.producto || 'Productos Atomy',
             destacado: exp.destacado
           }));
-          setTestimonios(formatted);
+
+          // Combinar dinámicos con los destacados por defecto, 
+          // pero priorizar los reales de la BD
+          setTestimonios(dynamicTestimonios);
         }
       })
       .catch(console.error)
@@ -144,7 +147,7 @@ export default function ExperienciasPage({ setCurrentView }: ExperienciasPagePro
           <div className="relative max-w-4xl mx-auto">
             {/* Glow effect */}
             <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500/20 to-teal-500/20 rounded-3xl blur-xl opacity-50"></div>
-            
+
             {/* Navigation buttons */}
             <button
               onClick={prevTestimonial}
@@ -200,9 +203,8 @@ export default function ExperienciasPage({ setCurrentView }: ExperienciasPagePro
                 <button
                   key={index}
                   onClick={() => setCurrentIndex(index)}
-                  className={`h-2 rounded-full transition-all ${
-                    index === currentIndex ? 'bg-gradient-to-r from-cyan-500 to-teal-500 w-6' : 'bg-slate-600 w-2 hover:bg-slate-500'
-                  }`}
+                  className={`h-2 rounded-full transition-all ${index === currentIndex ? 'bg-gradient-to-r from-cyan-500 to-teal-500 w-6' : 'bg-slate-600 w-2 hover:bg-slate-500'
+                    }`}
                 />
               ))}
             </div>
@@ -214,7 +216,7 @@ export default function ExperienciasPage({ setCurrentView }: ExperienciasPagePro
           <h3 className="text-2xl font-bold text-white mb-8 text-center">
             Más experiencias de nuestros miembros
           </h3>
-          
+
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {testimonios.map((testimonio, index) => (
               <div
@@ -223,7 +225,7 @@ export default function ExperienciasPage({ setCurrentView }: ExperienciasPagePro
               >
                 {/* Glow on hover */}
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-cyan-500/5 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                
+
                 <div className="relative z-10">
                   <div className="flex gap-1 mb-4">
                     {[...Array(testimonio.rating)].map((_, i) => (
@@ -252,7 +254,7 @@ export default function ExperienciasPage({ setCurrentView }: ExperienciasPagePro
         <div className="relative">
           {/* Background glow */}
           <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-teal-500/10 rounded-3xl blur-xl"></div>
-          
+
           <div className="relative bg-gradient-to-r from-cyan-500/20 via-teal-500/20 to-cyan-500/20 rounded-3xl p-8 sm:p-12 text-center border border-cyan-500/20">
             <div className="relative">
               <div className="absolute inset-0 bg-cyan-500/10 rounded-full blur-3xl"></div>
@@ -262,10 +264,10 @@ export default function ExperienciasPage({ setCurrentView }: ExperienciasPagePro
               ¿Listo para escribir tu propia historia?
             </h3>
             <p className="text-slate-300 mb-8 max-w-2xl mx-auto">
-              Únete a miles de personas que ya están transformando sus vidas con Atomy. 
+              Únete a miles de personas que ya están transformando sus vidas con Atomy.
               Registro gratuito y membresía sin costos.
             </p>
-            
+
             {/* Benefits */}
             <div className="flex flex-wrap justify-center gap-4 mb-8">
               {['Sin costos ocultos', 'Acceso completo', 'Soporte 24/7'].map((benefit, i) => (
@@ -275,8 +277,8 @@ export default function ExperienciasPage({ setCurrentView }: ExperienciasPagePro
                 </div>
               ))}
             </div>
-            
-            <Button 
+
+            <Button
               onClick={() => setCurrentView('registro')}
               size="lg"
               className="bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-white font-semibold rounded-full px-10 py-6 shadow-lg shadow-cyan-500/25 transition-all hover:scale-105"

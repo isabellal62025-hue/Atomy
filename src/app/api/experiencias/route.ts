@@ -9,11 +9,11 @@ export async function GET(request: NextRequest) {
     const aprobados = searchParams.get('aprobados');
 
     const where: { usuarioId?: string; aprobado?: boolean } = {};
-    
+
     if (usuarioId) {
       where.usuarioId = usuarioId;
     }
-    
+
     if (aprobados === 'true') {
       where.aprobado = true;
     }
@@ -23,32 +23,38 @@ export async function GET(request: NextRequest) {
       orderBy: { createdAt: 'desc' }
     });
 
-    // Obtener nombres de usuarios para cada experiencia
-    const experienciasConNombre = await Promise.all(
+    // Obtener nombres y ubicaciones de usuarios para cada experiencia
+    const experienciasEnriquecidas = await Promise.all(
       experiencias.map(async (exp) => {
         // Buscar el usuario por DPI (usuarioId es el DPI)
         const usuario = await db.usuario.findFirst({
           where: { dpi: exp.usuarioId }
         });
-        // También buscar en Registro si no hay usuario
-        const registro = !usuario ? await db.registro.findFirst({
+
+        // También buscar en Registro para obtener ubicación completa
+        const registro = await db.registro.findFirst({
           where: { dpi: exp.usuarioId }
-        }) : null;
-        
-        const nombreUsuario = usuario?.nombre || 
+        });
+
+        const nombreUsuario = usuario?.nombre ||
           (registro ? `${registro.nombres} ${registro.apellidos}` : null) ||
           'Miembro Atomy';
-        
+
+        const ubicacion = registro
+          ? `${registro.pais}, ${registro.departamento}`
+          : 'Miembro Atomy';
+
         return {
           ...exp,
-          nombreUsuario
+          nombreUsuario,
+          ubicacion
         };
       })
     );
 
     return NextResponse.json({
       success: true,
-      experiencias: experienciasConNombre
+      experiencias: experienciasEnriquecidas
     });
   } catch (error) {
     console.error('Error al obtener experiencias:', error);
@@ -72,6 +78,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Verificar si el usuario es admin para auto-aprobar
+    const usuarioAuth = await db.usuario.findFirst({
+      where: { dpi: usuarioId }
+    });
+    const isAdmin = usuarioAuth?.rol === 'admin';
+
     const nuevaExperiencia = await db.experiencia.create({
       data: {
         usuarioId,
@@ -79,7 +91,7 @@ export async function POST(request: NextRequest) {
         experiencia,
         producto: producto || null,
         calificacion: calificacion || 5,
-        aprobado: false,
+        aprobado: isAdmin, // Auto-aprobar si es admin
         destacado: false
       }
     });

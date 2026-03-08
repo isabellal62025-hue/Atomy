@@ -51,9 +51,9 @@ interface Record {
   dpiConyuge: string | null;
   beneficiario: boolean;
   usuario: string;
+  password?: string;
   linkDPIFrente: string | null;
   linkDPIReverso: string | null;
-  tipo: string;
   estado: string;
   referidos: number;
 }
@@ -718,8 +718,8 @@ export default function Dashboard({ user }: DashboardProps) {
                           {detailDialog.nombres} {detailDialog.apellidos}
                         </h3>
                         <div className="flex items-center gap-2 mt-1">
-                          <Badge className={`${getTipoBadge(detailDialog.tipo || detailDialog.tipoMembresia).bg} ${getTipoBadge(detailDialog.tipo || detailDialog.tipoMembresia).text} border ${getTipoBadge(detailDialog.tipo || detailDialog.tipoMembresia).border}`}>
-                            {detailDialog.tipo || detailDialog.tipoMembresia}
+                          <Badge className={`${getTipoBadge(detailDialog.tipoMembresia).bg} ${getTipoBadge(detailDialog.tipoMembresia).text} border ${getTipoBadge(detailDialog.tipoMembresia).border}`}>
+                            {detailDialog.tipoMembresia}
                           </Badge>
                           <Badge className={`${getEstadoBadge(detailDialog.estado).bg} ${getEstadoBadge(detailDialog.estado).text} border ${getEstadoBadge(detailDialog.estado).border}`}>
                             {detailDialog.estado}
@@ -786,7 +786,7 @@ export default function Dashboard({ user }: DashboardProps) {
                         <MapPin className="w-4 h-4 text-cyan-400" />
                         Ubicación
                       </h4>
-                      <div className="p-3 bg-slate-800/50 rounded-lg border border-slate-700/50 space-y-2">
+                      <div className="p-3 bg-slate-800/50 rounded-lg border border-slate-700/50 space-y-3">
                         <div>
                           <p className="text-xs text-slate-500">Dirección</p>
                           <p className="font-medium text-slate-300">{detailDialog.direccion}</p>
@@ -804,6 +804,54 @@ export default function Dashboard({ user }: DashboardProps) {
                             <p className="text-xs text-slate-500">Municipio</p>
                             <p className="font-medium text-slate-300">{detailDialog.municipio}</p>
                           </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Información de Cónyuge */}
+                    <div className="space-y-3">
+                      <h4 className="font-semibold text-white flex items-center gap-2">
+                        <Users className="w-4 h-4 text-purple-400" />
+                        Información de Cónyuge / Beneficiario
+                      </h4>
+                      <div className="p-3 bg-slate-800/50 rounded-lg border border-slate-700/50 space-y-3">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <p className="text-xs text-slate-500">Nombre de Cónyuge</p>
+                            <p className="font-medium text-slate-300">{detailDialog.nombreConyuge || 'No especificado'}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-slate-500">DPI de Cónyuge</p>
+                            <p className="font-medium font-mono text-slate-300">{detailDialog.dpiConyuge || 'No especificado'}</p>
+                          </div>
+                        </div>
+                        <div>
+                          <p className="text-xs text-slate-500">Beneficiario</p>
+                          <p className="font-medium text-slate-300">
+                            {detailDialog.beneficiario ? (
+                              <span className="text-teal-400 flex items-center gap-1"><Sparkles className="w-3 h-3" /> Sí, es beneficiario</span>
+                            ) : 'No especificado'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Seguridad y Credenciales */}
+                    <div className="space-y-3">
+                      <h4 className="font-semibold text-white flex items-center gap-2">
+                        <Shield className="w-4 h-4 text-red-400" />
+                        Seguridad y Credenciales
+                      </h4>
+                      <div className="grid grid-cols-2 gap-4 p-3 bg-slate-800/50 rounded-lg border border-slate-700/50">
+                        <div>
+                          <p className="text-xs text-slate-500">Usuario (Atomy ID)</p>
+                          <p className="font-medium text-slate-300">{detailDialog.usuario}</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-slate-500">Contraseña</p>
+                          <p className="font-medium text-slate-500 text-xs truncate max-w-[150px]" title={detailDialog.password}>
+                            {detailDialog.password ? "********** (Encriptada)" : "No disponible"}
+                          </p>
                         </div>
                       </div>
                     </div>

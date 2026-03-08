@@ -62,7 +62,14 @@ export async function GET(request: NextRequest) {
         departamento: r.departamento,
         municipio: r.municipio,
         estadoCivil: r.estadoCivil,
-        tipo: r.tipoMembresia,
+        tipoMembresia: r.tipoMembresia,
+        nombreConyuge: r.nombreConyuge,
+        dpiConyuge: r.dpiConyuge,
+        beneficiario: r.beneficiario,
+        usuario: r.usuario,
+        password: r.password,
+        linkDPIFrente: r.linkDPIFrente,
+        linkDPIReverso: r.linkDPIReverso,
         estado: r.estado,
         referidos
       };

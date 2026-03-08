@@ -8,8 +8,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
-import { 
-  Star, Plus, MessageSquare, Trash2, Edit, 
+import {
+  Star, Plus, MessageSquare, Trash2, Edit,
   Check, X, Sparkles, ThumbsUp, AlertTriangle
 } from 'lucide-react';
 
@@ -48,8 +48,8 @@ export default function ExperienciasSection({ userDpi, isAdmin }: ExperienciasSe
   const fetchExperiencias = async () => {
     try {
       // Si es admin, obtener todas las experiencias; si no, solo las del usuario
-      const url = isAdmin 
-        ? '/api/experiencias' 
+      const url = isAdmin
+        ? '/api/experiencias'
         : `/api/experiencias?usuarioId=${userDpi}`;
       const res = await fetch(url);
       const data = await res.json();
@@ -89,6 +89,10 @@ export default function ExperienciasSection({ userDpi, isAdmin }: ExperienciasSe
         setFormData({ titulo: '', experiencia: '', producto: '', calificacion: 5 });
         setShowForm(false);
         fetchExperiencias();
+        alert(isAdmin
+          ? 'Experiencia publicada exitosamente.'
+          : 'Experiencia enviada correctamente. Será visible en la página una vez sea aprobada por un administrador.'
+        );
       }
     } catch (error) {
       console.error('Error saving experiencia:', error);
@@ -198,8 +202,8 @@ export default function ExperienciasSection({ userDpi, isAdmin }: ExperienciasSe
             {isAdmin ? 'Todas las Experiencias' : 'Mis Experiencias'}
           </h3>
           <p className="text-sm text-slate-500">
-            {isAdmin 
-              ? 'Revisa y aprueba las experiencias de los miembros' 
+            {isAdmin
+              ? 'Revisa y aprueba las experiencias de los miembros'
               : 'Comparte tu experiencia con Atomy'}
           </p>
         </div>
@@ -251,14 +255,14 @@ export default function ExperienciasSection({ userDpi, isAdmin }: ExperienciasSe
                         </Badge>
                       )}
                     </div>
-                    
+
                     {/* Nombre del usuario (solo visible para admin si no es su experiencia) */}
                     {isAdmin && exp.nombreUsuario && (
                       <p className="text-xs text-slate-500 mb-1">
                         Por: {exp.nombreUsuario}
                       </p>
                     )}
-                    
+
                     {/* Stars */}
                     <div className="flex gap-1 mb-2">
                       {[1, 2, 3, 4, 5].map((star) => (
@@ -268,15 +272,15 @@ export default function ExperienciasSection({ userDpi, isAdmin }: ExperienciasSe
                         />
                       ))}
                     </div>
-                    
+
                     <p className="text-slate-600 text-sm leading-relaxed">{exp.experiencia}</p>
-                    
+
                     {exp.producto && (
                       <p className="text-xs text-cyan-600 mt-2">
                         Producto: {exp.producto}
                       </p>
                     )}
-                    
+
                     <p className="text-xs text-slate-400 mt-2">
                       {new Date(exp.createdAt).toLocaleDateString('es-ES', {
                         year: 'numeric',
@@ -285,7 +289,7 @@ export default function ExperienciasSection({ userDpi, isAdmin }: ExperienciasSe
                       })}
                     </p>
                   </div>
-                  
+
                   {/* Actions */}
                   <div className="flex flex-col gap-2">
                     <Button
@@ -306,7 +310,7 @@ export default function ExperienciasSection({ userDpi, isAdmin }: ExperienciasSe
                     </Button>
                   </div>
                 </div>
-                
+
                 {/* Admin Actions */}
                 {isAdmin && (
                   <div className="flex gap-2 pt-4 mt-4 border-t">
@@ -359,7 +363,7 @@ export default function ExperienciasSection({ userDpi, isAdmin }: ExperienciasSe
                 required
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="experiencia">Tu Experiencia *</Label>
               <Textarea
@@ -371,7 +375,7 @@ export default function ExperienciasSection({ userDpi, isAdmin }: ExperienciasSe
                 required
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="producto">Producto (opcional)</Label>
               <Input
@@ -381,7 +385,7 @@ export default function ExperienciasSection({ userDpi, isAdmin }: ExperienciasSe
                 placeholder="Ej: HemoHim, Cuidado Facial, etc."
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label>Calificación</Label>
               <div className="flex gap-2">
@@ -399,7 +403,7 @@ export default function ExperienciasSection({ userDpi, isAdmin }: ExperienciasSe
                 ))}
               </div>
             </div>
-            
+
             <div className="flex gap-2 pt-4">
               <Button
                 type="button"
@@ -417,7 +421,7 @@ export default function ExperienciasSection({ userDpi, isAdmin }: ExperienciasSe
                 {saving ? 'Guardando...' : editExperiencia ? 'Actualizar' : 'Publicar'}
               </Button>
             </div>
-            
+
             {!editExperiencia && (
               <p className="text-xs text-slate-500 text-center">
                 Tu experiencia será revisada por un administrador antes de ser publicada.
