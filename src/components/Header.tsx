@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Menu, X, User, LogOut, LayoutDashboard, Sparkles } from 'lucide-react';
@@ -10,8 +10,8 @@ import { Menu, X, User, LogOut, LayoutDashboard, Sparkles } from 'lucide-react';
 interface HeaderProps {
   currentView: string;
   setCurrentView: (view: string) => void;
-  user: { nombre: string; rol: string; dpi: string } | null;
-  setUser: (user: { nombre: string; rol: string; dpi: string } | null) => void;
+  user: { nombre: string; rol: string; dpi: string; usuario: string } | null;
+  setUser: (user: { nombre: string; rol: string; dpi: string; usuario: string } | null) => void;
 }
 
 export default function Header({ currentView, setCurrentView, user, setUser }: HeaderProps) {
@@ -85,25 +85,23 @@ export default function Header({ currentView, setCurrentView, user, setUser }: H
                 <button
                   key={item.id}
                   onClick={() => setCurrentView(item.id)}
-                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 ${
-                    currentView === item.id
+                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 ${currentView === item.id
                       ? 'bg-gradient-to-r from-cyan-500/20 to-teal-500/20 text-cyan-300 border border-cyan-500/30'
                       : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
-                  }`}
+                    }`}
                 >
                   {item.label}
                 </button>
               ))}
-              
+
               {user ? (
                 <>
                   <button
                     onClick={() => setCurrentView('dashboard')}
-                    className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 ${
-                      currentView === 'dashboard'
+                    className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 ${currentView === 'dashboard'
                         ? 'bg-gradient-to-r from-cyan-500/20 to-teal-500/20 text-cyan-300 border border-cyan-500/30'
                         : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
-                    }`}
+                      }`}
                   >
                     <LayoutDashboard className="w-4 h-4" />
                     Dashboard
@@ -118,9 +116,9 @@ export default function Header({ currentView, setCurrentView, user, setUser }: H
                         <p className="text-xs text-slate-400 capitalize">{user.rol}</p>
                       </div>
                     </div>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
+                    <Button
+                      variant="ghost"
+                      size="sm"
                       onClick={handleLogout}
                       className="text-slate-400 hover:text-red-400 hover:bg-red-500/10"
                     >
@@ -129,8 +127,8 @@ export default function Header({ currentView, setCurrentView, user, setUser }: H
                   </div>
                 </>
               ) : (
-                <Button 
-                  onClick={() => setLoginOpen(true)} 
+                <Button
+                  onClick={() => setLoginOpen(true)}
                   className="ml-4 bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-white shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all"
                 >
                   <User className="w-4 h-4 mr-2" />
@@ -157,11 +155,10 @@ export default function Header({ currentView, setCurrentView, user, setUser }: H
                 <button
                   key={item.id}
                   onClick={() => { setCurrentView(item.id); setMobileMenuOpen(false); }}
-                  className={`block w-full text-left px-4 py-3 rounded-lg transition-all ${
-                    currentView === item.id
+                  className={`block w-full text-left px-4 py-3 rounded-lg transition-all ${currentView === item.id
                       ? 'bg-gradient-to-r from-cyan-500/20 to-teal-500/20 text-cyan-300'
                       : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
-                  }`}
+                    }`}
                 >
                   {item.label}
                 </button>
@@ -182,8 +179,8 @@ export default function Header({ currentView, setCurrentView, user, setUser }: H
                   </button>
                 </>
               ) : (
-                <Button 
-                  onClick={() => { setLoginOpen(true); setMobileMenuOpen(false); }} 
+                <Button
+                  onClick={() => { setLoginOpen(true); setMobileMenuOpen(false); }}
                   className="w-full mt-4 bg-gradient-to-r from-cyan-500 to-teal-500"
                 >
                   Iniciar Sesión
@@ -203,6 +200,9 @@ export default function Header({ currentView, setCurrentView, user, setUser }: H
                 Iniciar Sesión
               </span>
             </DialogTitle>
+            <DialogDescription className="text-center text-slate-400">
+              Ingresa tus credenciales para acceder a tu panel de control.
+            </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleLogin} className="space-y-4 mt-4">
             <div className="space-y-2">
@@ -231,18 +231,18 @@ export default function Header({ currentView, setCurrentView, user, setUser }: H
             {error && (
               <p className="text-sm text-red-400 text-center bg-red-500/10 py-2 rounded-lg">{error}</p>
             )}
-            <Button 
-              type="submit" 
-              className="w-full bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600" 
+            <Button
+              type="submit"
+              className="w-full bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600"
               disabled={loading}
             >
               {loading ? 'Verificando...' : 'Ingresar'}
             </Button>
             <p className="text-xs text-center text-slate-500">
               ¿No tienes cuenta?{' '}
-              <button 
-                type="button" 
-                onClick={() => { setLoginOpen(false); setCurrentView('registro'); }} 
+              <button
+                type="button"
+                onClick={() => { setLoginOpen(false); setCurrentView('registro'); }}
                 className="text-cyan-400 hover:text-cyan-300 hover:underline"
               >
                 Regístrate aquí

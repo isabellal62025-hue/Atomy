@@ -6,13 +6,13 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import ExperienciasSection from '@/components/ExperienciasSection';
-import { 
-  Users, UserCheck, Briefcase, ShoppingBag, 
+import {
+  Users, UserCheck, Briefcase, ShoppingBag,
   TrendingUp, Search, Eye,
   ChevronLeft, ChevronRight, Download, ExternalLink,
   MapPin, Phone, Mail, Calendar, User,
@@ -23,6 +23,7 @@ interface UserInfo {
   nombre: string;
   rol: string;
   dpi: string;
+  usuario: string;
 }
 
 interface DashboardProps {
@@ -89,20 +90,20 @@ export default function Dashboard({ user }: DashboardProps) {
 
   const fetchData = async () => {
     try {
-      const dashRes = await fetch(`/api/dashboard?role=${user?.rol}&dpi=${user?.dpi}`);
+      const dashRes = await fetch(`/api/dashboard?role=${user?.rol}&dpi=${user?.dpi}&codigo=${user?.usuario}`);
       const dashData = await dashRes.json();
-      
+
       const exportRes = await fetch('/api/export?format=json');
       const exportData = await exportRes.json();
-      
+
       const usuariosRes = await fetch('/api/usuarios');
       const usuariosData = await usuariosRes.json();
-      
+
       if (dashData.success) {
         setRecords(dashData.records);
         setStats(dashData.stats);
       }
-      
+
       if (exportData.success) {
         setAllRecords(exportData.registros);
       }
@@ -229,13 +230,13 @@ export default function Dashboard({ user }: DashboardProps) {
         direccion: formData.get('direccion'),
         estado: formData.get('estado'),
       };
-      
+
       const res = await fetch('/api/registros', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
-      
+
       const result = await res.json();
       if (result.success) {
         await fetchData();
@@ -259,13 +260,13 @@ export default function Dashboard({ user }: DashboardProps) {
         rol: formData.get('rol'),
         password: formData.get('password') || undefined,
       };
-      
+
       const res = await fetch('/api/usuarios', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
-      
+
       const result = await res.json();
       if (result.success) {
         await fetchData();
@@ -321,8 +322,8 @@ export default function Dashboard({ user }: DashboardProps) {
               </p>
             </div>
             {user?.rol === 'admin' && (
-              <Button 
-                onClick={exportToCSV} 
+              <Button
+                onClick={exportToCSV}
                 className="bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 shadow-lg shadow-cyan-500/25 transition-all hover:scale-105"
               >
                 <Download className="w-4 h-4 mr-2" />
@@ -411,22 +412,22 @@ export default function Dashboard({ user }: DashboardProps) {
           {/* Tabs for Records and Users */}
           <Tabs defaultValue="registros" className="space-y-6">
             <TabsList className="bg-slate-800/50 p-1 rounded-xl border border-slate-700/50">
-              <TabsTrigger 
-                value="registros" 
+              <TabsTrigger
+                value="registros"
                 className="rounded-lg px-6 data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500/20 data-[state=active]:to-teal-500/20 data-[state=active]:text-cyan-300 text-slate-400"
               >
                 Registros
               </TabsTrigger>
               {user?.rol === 'admin' && (
-                <TabsTrigger 
-                  value="usuarios" 
+                <TabsTrigger
+                  value="usuarios"
                   className="rounded-lg px-6 data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500/20 data-[state=active]:to-teal-500/20 data-[state=active]:text-cyan-300 text-slate-400"
                 >
                   Usuarios
                 </TabsTrigger>
               )}
-              <TabsTrigger 
-                value="experiencias" 
+              <TabsTrigger
+                value="experiencias"
                 className="rounded-lg px-6 data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500/20 data-[state=active]:to-teal-500/20 data-[state=active]:text-cyan-300 text-slate-400"
               >
                 Mis Experiencias
@@ -484,11 +485,10 @@ export default function Dashboard({ user }: DashboardProps) {
                             const tipoBadge = getTipoBadge(record.tipo || record.tipoMembresia);
                             const estadoBadge = getEstadoBadge(record.estado);
                             return (
-                              <tr 
-                                key={record.id} 
-                                className={`border-b border-slate-700/30 transition-colors hover:bg-slate-700/20 ${
-                                  index % 2 === 0 ? 'bg-slate-800/20' : 'bg-slate-800/40'
-                                }`}
+                              <tr
+                                key={record.id}
+                                className={`border-b border-slate-700/30 transition-colors hover:bg-slate-700/20 ${index % 2 === 0 ? 'bg-slate-800/20' : 'bg-slate-800/40'
+                                  }`}
                               >
                                 <td className="py-3 px-4">
                                   <div>
@@ -635,11 +635,10 @@ export default function Dashboard({ user }: DashboardProps) {
                             {filteredUsuarios.map((u, index) => {
                               const rolBadge = getRolBadge(u.rol);
                               return (
-                                <tr 
-                                  key={u.id} 
-                                  className={`border-b border-slate-700/30 transition-colors hover:bg-slate-700/20 ${
-                                    index % 2 === 0 ? 'bg-slate-800/20' : 'bg-slate-800/40'
-                                  }`}
+                                <tr
+                                  key={u.id}
+                                  className={`border-b border-slate-700/30 transition-colors hover:bg-slate-700/20 ${index % 2 === 0 ? 'bg-slate-800/20' : 'bg-slate-800/40'
+                                    }`}
                                 >
                                   <td className="py-3 px-4 font-medium text-white">{u.nombre}</td>
                                   <td className="py-3 px-4 text-slate-400">{u.usuario}</td>
@@ -687,9 +686,9 @@ export default function Dashboard({ user }: DashboardProps) {
 
             {/* Experiencias Tab */}
             <TabsContent value="experiencias">
-              <ExperienciasSection 
-                userDpi={user?.dpi || ''} 
-                isAdmin={user?.rol === 'admin'} 
+              <ExperienciasSection
+                userDpi={user?.dpi || ''}
+                isAdmin={user?.rol === 'admin'}
               />
             </TabsContent>
           </Tabs>
@@ -702,6 +701,9 @@ export default function Dashboard({ user }: DashboardProps) {
                   <User className="w-5 h-5 text-cyan-400" />
                   Detalles del Miembro
                 </DialogTitle>
+                <DialogDescription className="text-slate-400">
+                  Consulta la información completa del miembro registrado en el sistema.
+                </DialogDescription>
               </DialogHeader>
               {detailDialog && (
                 <ScrollArea className="max-h-[70vh] pr-4">
@@ -893,63 +895,66 @@ export default function Dashboard({ user }: DashboardProps) {
                   <Edit className="w-5 h-5 text-cyan-400" />
                   Editar Registro
                 </DialogTitle>
+                <DialogDescription className="text-slate-400">
+                  Modifica los datos del miembro seleccionado. Los cambios se aplicarán de inmediato.
+                </DialogDescription>
               </DialogHeader>
               {editDialog && (
                 <form action={handleUpdateRecord} className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label className="text-slate-300">Nombres</Label>
-                      <Input 
-                        id="nombres" 
-                        name="nombres" 
-                        defaultValue={editDialog.nombres} 
+                      <Input
+                        id="nombres"
+                        name="nombres"
+                        defaultValue={editDialog.nombres}
                         className="bg-slate-800/50 border-slate-700 text-white focus:border-cyan-500"
                       />
                     </div>
                     <div className="space-y-2">
                       <Label className="text-slate-300">Apellidos</Label>
-                      <Input 
-                        id="apellidos" 
-                        name="apellidos" 
-                        defaultValue={editDialog.apellidos} 
+                      <Input
+                        id="apellidos"
+                        name="apellidos"
+                        defaultValue={editDialog.apellidos}
                         className="bg-slate-800/50 border-slate-700 text-white focus:border-cyan-500"
                       />
                     </div>
                   </div>
                   <div className="space-y-2">
                     <Label className="text-slate-300">Teléfono</Label>
-                    <Input 
-                      id="telefono" 
-                      name="telefono" 
-                      defaultValue={editDialog.telefono} 
+                    <Input
+                      id="telefono"
+                      name="telefono"
+                      defaultValue={editDialog.telefono}
                       className="bg-slate-800/50 border-slate-700 text-white focus:border-cyan-500"
                     />
                   </div>
                   <div className="space-y-2">
                     <Label className="text-slate-300">Email</Label>
-                    <Input 
-                      id="email" 
-                      name="email" 
-                      type="email" 
-                      defaultValue={editDialog.email} 
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      defaultValue={editDialog.email}
                       className="bg-slate-800/50 border-slate-700 text-white focus:border-cyan-500"
                     />
                   </div>
                   <div className="space-y-2">
                     <Label className="text-slate-300">Dirección</Label>
-                    <Input 
-                      id="direccion" 
-                      name="direccion" 
-                      defaultValue={editDialog.direccion} 
+                    <Input
+                      id="direccion"
+                      name="direccion"
+                      defaultValue={editDialog.direccion}
                       className="bg-slate-800/50 border-slate-700 text-white focus:border-cyan-500"
                     />
                   </div>
                   <div className="space-y-2">
                     <Label className="text-slate-300">Estado</Label>
-                    <select 
-                      id="estado" 
-                      name="estado" 
-                      defaultValue={editDialog.estado} 
+                    <select
+                      id="estado"
+                      name="estado"
+                      defaultValue={editDialog.estado}
                       className="w-full border border-slate-700 rounded-md px-3 py-2 bg-slate-800/50 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
                     >
                       <option value="activo">Activo</option>
@@ -958,17 +963,17 @@ export default function Dashboard({ user }: DashboardProps) {
                     </select>
                   </div>
                   <div className="flex gap-2 pt-4">
-                    <Button 
-                      type="button" 
-                      variant="outline" 
-                      className="flex-1 border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white" 
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="flex-1 border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white"
                       onClick={() => setEditDialog(null)}
                     >
                       Cancelar
                     </Button>
-                    <Button 
-                      type="submit" 
-                      className="flex-1 bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600" 
+                    <Button
+                      type="submit"
+                      className="flex-1 bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600"
                       disabled={saving}
                     >
                       {saving ? 'Guardando...' : 'Guardar Cambios'}
@@ -987,33 +992,36 @@ export default function Dashboard({ user }: DashboardProps) {
                   <Edit className="w-5 h-5 text-cyan-400" />
                   Editar Usuario
                 </DialogTitle>
+                <DialogDescription className="text-slate-400">
+                  Actualiza las credenciales y el rol de acceso al sistema del usuario.
+                </DialogDescription>
               </DialogHeader>
               {editUserDialog && (
                 <form action={handleUpdateUser} className="space-y-4">
                   <div className="space-y-2">
                     <Label className="text-slate-300">Nombre</Label>
-                    <Input 
-                      id="nombre" 
-                      name="nombre" 
-                      defaultValue={editUserDialog.nombre} 
+                    <Input
+                      id="nombre"
+                      name="nombre"
+                      defaultValue={editUserDialog.nombre}
                       className="bg-slate-800/50 border-slate-700 text-white focus:border-cyan-500"
                     />
                   </div>
                   <div className="space-y-2">
                     <Label className="text-slate-300">Usuario</Label>
-                    <Input 
-                      id="usuario" 
-                      name="usuario" 
-                      defaultValue={editUserDialog.usuario} 
+                    <Input
+                      id="usuario"
+                      name="usuario"
+                      defaultValue={editUserDialog.usuario}
                       className="bg-slate-800/50 border-slate-700 text-white focus:border-cyan-500"
                     />
                   </div>
                   <div className="space-y-2">
                     <Label className="text-slate-300">Rol</Label>
-                    <select 
-                      id="rol" 
-                      name="rol" 
-                      defaultValue={editUserDialog.rol} 
+                    <select
+                      id="rol"
+                      name="rol"
+                      defaultValue={editUserDialog.rol}
                       className="w-full border border-slate-700 rounded-md px-3 py-2 bg-slate-800/50 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
                     >
                       <option value="admin">Administrador</option>
@@ -1022,26 +1030,26 @@ export default function Dashboard({ user }: DashboardProps) {
                   </div>
                   <div className="space-y-2">
                     <Label className="text-slate-300">Nueva Contraseña (dejar vacío para no cambiar)</Label>
-                    <Input 
-                      id="password" 
-                      name="password" 
-                      type="password" 
-                      placeholder="••••••••" 
+                    <Input
+                      id="password"
+                      name="password"
+                      type="password"
+                      placeholder="••••••••"
                       className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 focus:border-cyan-500"
                     />
                   </div>
                   <div className="flex gap-2 pt-4">
-                    <Button 
-                      type="button" 
-                      variant="outline" 
-                      className="flex-1 border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white" 
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="flex-1 border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white"
                       onClick={() => setEditUserDialog(null)}
                     >
                       Cancelar
                     </Button>
-                    <Button 
-                      type="submit" 
-                      className="flex-1 bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600" 
+                    <Button
+                      type="submit"
+                      className="flex-1 bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600"
                       disabled={saving}
                     >
                       {saving ? 'Guardando...' : 'Guardar Cambios'}
@@ -1060,24 +1068,27 @@ export default function Dashboard({ user }: DashboardProps) {
                   <AlertTriangle className="w-5 h-5" />
                   Confirmar Eliminación
                 </DialogTitle>
+                <DialogDescription className="text-slate-400">
+                  Esta acción es permanente y eliminará todos los registros asociados.
+                </DialogDescription>
               </DialogHeader>
               {deleteConfirm && (
                 <div className="space-y-4">
                   <p className="text-slate-400">
-                    ¿Estás seguro de que deseas eliminar a <span className="text-white font-medium">{deleteConfirm.name}</span>? 
+                    ¿Estás seguro de que deseas eliminar a <span className="text-white font-medium">{deleteConfirm.name}</span>?
                     Esta acción no se puede deshacer.
                   </p>
                   <div className="flex gap-2">
-                    <Button 
-                      variant="outline" 
-                      className="flex-1 border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white" 
+                    <Button
+                      variant="outline"
+                      className="flex-1 border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white"
                       onClick={() => setDeleteConfirm(null)}
                     >
                       Cancelar
                     </Button>
-                    <Button 
-                      variant="destructive" 
-                      className="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30" 
+                    <Button
+                      variant="destructive"
+                      className="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30"
                       onClick={() => {
                         if (deleteConfirm.type === 'record') {
                           handleDeleteRecord(deleteConfirm.id);

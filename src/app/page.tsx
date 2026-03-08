@@ -18,7 +18,7 @@ import ExitPopup from '@/components/ExitPopup';
 export default function Home() {
   const [currentView, setCurrentView] = useState('landing');
   const [productCategory, setProductCategory] = useState('belleza');
-  const [user, setUser] = useState<{ nombre: string; rol: string; dpi: string } | null>(null);
+  const [user, setUser] = useState<{ nombre: string; rol: string; dpi: string; usuario: string } | null>(null);
 
   // Cargar vista y usuario guardados al inicio
   useEffect(() => {

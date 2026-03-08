@@ -6,13 +6,14 @@ export async function GET(request: NextRequest) {
     const { searchParams } = request.nextUrl;
     const userRole = searchParams.get('role');
     const userDpi = searchParams.get('dpi');
+    const userCodigo = searchParams.get('codigo');
 
     // Obtener todos los registros
     const registros = await db.registro.findMany({
       orderBy: { createdAt: 'desc' }
     });
 
-    // Calcular estadísticas
+    // Calcular estadísticas generales
     const total = registros.length;
     const distribuidores = registros.filter(r => r.tipoMembresia.toLowerCase() === 'distribuidor').length;
     const emprendedores = registros.filter(r => r.tipoMembresia.toLowerCase() === 'emprendedor').length;
@@ -21,16 +22,19 @@ export async function GET(request: NextRequest) {
     // Filtrar según rol
     let filteredRegistros = registros;
     if (userRole !== 'admin') {
-      // Si no es admin, mostrar solo los que patrocinó
-      filteredRegistros = registros.filter(r => 
-        r.patrocinadorCodigo === userDpi || r.patrocinadorNombre.toLowerCase().includes(userDpi?.toLowerCase() || '')
+      // Si no es admin, mostrar solo los que patrocinó (por DPI o por Código de Usuario)
+      filteredRegistros = registros.filter(r =>
+        r.patrocinadorCodigo === userDpi ||
+        r.patrocinadorCodigo === userCodigo ||
+        r.patrocinadorNombre.toLowerCase().includes(userDpi?.toLowerCase() || '') ||
+        (userCodigo && r.patrocinadorNombre.toLowerCase().includes(userCodigo.toLowerCase()))
       );
     }
 
     // Calcular referidos para cada registro
     const registrosConReferidos = filteredRegistros.map(r => {
-      const referidos = registros.filter(reg => 
-        reg.patrocinadorCodigo === r.dpi || 
+      const referidos = registros.filter(reg =>
+        reg.patrocinadorCodigo === r.dpi ||
         reg.patrocinadorNombre.toLowerCase() === `${r.nombres.toLowerCase()} ${r.apellidos.toLowerCase()}`
       ).length;
 
