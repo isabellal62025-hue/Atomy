@@ -16,6 +16,10 @@ import Footer from '@/components/Footer';
 import ExitPopup from '@/components/ExitPopup';
 
 export default function Home() {
+  const [currentView, setCurrentView] = useState('landing');
+  const [productCategory, setProductCategory] = useState('belleza');
+  const [user, setUser] = useState<{ nombre: string; rol: string; dpi: string } | null>(null);
+
   // Cargar vista y usuario guardados al inicio
   useEffect(() => {
     const savedView = localStorage.getItem('current_view');
