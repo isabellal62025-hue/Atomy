@@ -13,7 +13,7 @@ import { Textarea } from '@/components/ui/textarea';
 import ExperienciasSection from '@/components/ExperienciasSection';
 import {
   Users, UserCheck, Briefcase, ShoppingBag,
-  TrendingUp, Search, Eye,
+  TrendingUp, Search, Eye, EyeOff,
   ChevronLeft, ChevronRight, Download, ExternalLink,
   MapPin, Phone, Mail, Calendar, User,
   Trash2, Edit, AlertTriangle, Star, Sparkles, Shield
@@ -82,6 +82,7 @@ export default function Dashboard({ user }: DashboardProps) {
   const [searchUserTerm, setSearchUserTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [detailDialog, setDetailDialog] = useState<Record | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
   const [editDialog, setEditDialog] = useState<Record | null>(null);
   const [editUserDialog, setEditUserDialog] = useState<Usuario | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<{ type: 'record' | 'user'; id: string; name: string } | null>(null);
@@ -694,7 +695,7 @@ export default function Dashboard({ user }: DashboardProps) {
           </Tabs>
 
           {/* Detail Dialog */}
-          <Dialog open={!!detailDialog} onOpenChange={() => setDetailDialog(null)}>
+          <Dialog open={!!detailDialog} onOpenChange={() => { setDetailDialog(null); setShowPassword(false); }}>
             <DialogContent className="max-w-2xl max-h-[90vh] bg-slate-900 border-slate-700 text-white">
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2 text-xl">
@@ -849,9 +850,22 @@ export default function Dashboard({ user }: DashboardProps) {
                         </div>
                         <div>
                           <p className="text-xs text-slate-500">Contraseña</p>
-                          <p className="font-medium text-slate-500 text-xs truncate max-w-[150px]" title={detailDialog.password}>
-                            {detailDialog.password ? "********** (Encriptada)" : "No disponible"}
-                          </p>
+                          <div className="flex items-center gap-2">
+                            <p className="font-medium text-slate-300">
+                              {showPassword ? detailDialog.password : '••••••••'}
+                            </p>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-6 w-6 p-0 text-slate-500 hover:text-cyan-400"
+                              onClick={() => setShowPassword(!showPassword)}
+                            >
+                              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                            </Button>
+                          </div>
+                          {!showPassword && detailDialog.password?.startsWith('$2') && (
+                            <p className="text-[10px] text-slate-600 mt-1 italic">(Encriptada del sistema anterior)</p>
+                          )}
                         </div>
                       </div>
                     </div>

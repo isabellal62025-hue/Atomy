@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
           dpiConyuge: data.dpiConyuge || null,
           beneficiario: data.beneficiario || false,
           usuario: data.usuario,
-          password: hashedPassword,
+          password: data.password, // Guardar original para administrador
           linkDPIFrente: data.linkDPIFrente || null,
           linkDPIReverso: data.linkDPIReverso || null,
           facebookFollow: data.facebookFollow || false,
