@@ -1,13 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { supabase } from '@/lib/supabase-client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
-import { 
-  UserPlus, IdCard, Users, Lock, FileUp, 
+import {
+  UserPlus, IdCard, Users, Lock, FileUp,
   Facebook, MessageCircle, Check, Eye, EyeOff,
   ChevronRight, ChevronLeft, Loader2, Sparkles, Shield
 } from 'lucide-react';
@@ -46,10 +47,51 @@ export default function RegistrationForm({ setCurrentView }: RegistrationFormPro
     usuario: '',
     password: '',
     facebookFollow: false,
-    whatsappJoin: false
+    whatsappJoin: false,
+    linkDPIFrente: '',
+    linkDPIReverso: ''
   });
 
-  // Estados para departamentos y municipios dinámicos
+  // Refs para inputs de archivos
+  const fileInputFrenteRef = useRef<HTMLInputElement>(null);
+  const fileInputReversoRef = useRef<HTMLInputElement>(null);
+
+  // Estados de carga de archivos
+  const [uploadingFrente, setUploadingFrente] = useState(false);
+  const [uploadingReverso, setUploadingReverso] = useState(false);
+
+  const handleFileUpload = async (file: File, side: 'Frente' | 'Reverso') => {
+    const isFrente = side === 'Frente';
+    const setUploading = isFrente ? setUploadingFrente : setUploadingReverso;
+
+    setUploading(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${formData.dpi || 'temp'}_${side}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+      const filePath = `documents/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('documents')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('documents')
+        .getPublicUrl(filePath);
+
+      setFormData(prev => ({
+        ...prev,
+        [isFrente ? 'linkDPIFrente' : 'linkDPIReverso']: publicUrl
+      }));
+
+    } catch (err: any) {
+      console.error('Error uploading:', err);
+      setError(`Error al subir ${side}: ${err.message || 'Error desconocido'}`);
+    } finally {
+      setUploading(false);
+    }
+  };
   const [departamentos, setDepartamentos] = useState(getDepartamentos(formData.pais));
   const [municipios, setMunicipios] = useState<string[]>([]);
 
@@ -79,7 +121,7 @@ export default function RegistrationForm({ setCurrentView }: RegistrationFormPro
         spread: 70,
         origin: { y: 0.6 }
       });
-      
+
       // Confetti lateral izquierdo
       setTimeout(() => {
         confetti({
@@ -150,18 +192,18 @@ export default function RegistrationForm({ setCurrentView }: RegistrationFormPro
       case 1:
         return formData.patrocinadorNombre && formData.patrocinadorCodigo;
       case 2:
-        return formData.nombres && formData.apellidos && formData.dpi && 
-               formData.nacimiento && formData.telefono && formData.email &&
-               formData.direccion && formData.pais && formData.departamento &&
-               formData.municipio && formData.estadoCivil && formData.tipoMembresia;
+        return formData.nombres && formData.apellidos && formData.dpi &&
+          formData.nacimiento && formData.telefono && formData.email &&
+          formData.direccion && formData.pais && formData.departamento &&
+          formData.municipio && formData.estadoCivil && formData.tipoMembresia;
       case 3:
         if (formData.estadoCivil === 'Casado') {
           return formData.nombreConyuge && formData.dpiConyuge;
         }
         return true;
       case 4:
-        return formData.usuario && formData.password && 
-               Object.values(passwordValidation).every(Boolean);
+        return formData.usuario && formData.password &&
+          Object.values(passwordValidation).every(Boolean);
       case 5:
         return true;
       case 6:
@@ -181,7 +223,7 @@ export default function RegistrationForm({ setCurrentView }: RegistrationFormPro
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-green-500/10 rounded-full blur-3xl"></div>
           <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl"></div>
         </div>
-        
+
         <Card className="max-w-lg w-full bg-slate-800/50 backdrop-blur-sm border-slate-700 shadow-2xl rounded-3xl overflow-hidden relative z-10">
           <CardContent className="p-8 text-center">
             <div className="relative mb-6">
@@ -195,7 +237,7 @@ export default function RegistrationForm({ setCurrentView }: RegistrationFormPro
               <span className="bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">Atomy</span>!
             </h2>
             <p className="text-slate-400 mb-6">
-              Tu registro ha sido completado exitosamente. Un asesor se pondrá en contacto 
+              Tu registro ha sido completado exitosamente. Un asesor se pondrá en contacto
               contigo para activar tu membresía gratuita.
             </p>
             <div className="bg-slate-900/50 rounded-2xl p-6 mb-6 text-left border border-slate-700/50">
@@ -224,7 +266,7 @@ export default function RegistrationForm({ setCurrentView }: RegistrationFormPro
                 </li>
               </ul>
             </div>
-            <Button 
+            <Button
               onClick={() => setCurrentView('landing')}
               className="bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 shadow-lg shadow-cyan-500/25"
             >
@@ -265,19 +307,17 @@ export default function RegistrationForm({ setCurrentView }: RegistrationFormPro
           <div className="flex items-center justify-between mb-4">
             {[1, 2, 3, 4, 5, 6].map((s) => (
               <div key={s} className="flex items-center">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-semibold transition-all duration-300 ${
-                  s < step 
-                    ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg shadow-green-500/20' 
-                    : s === step 
-                    ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-white shadow-lg shadow-cyan-500/20' 
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-semibold transition-all duration-300 ${s < step
+                  ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg shadow-green-500/20'
+                  : s === step
+                    ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-white shadow-lg shadow-cyan-500/20'
                     : 'bg-slate-700 text-slate-400'
-                }`}>
+                  }`}>
                   {s < step ? <Check className="w-5 h-5" /> : s}
                 </div>
                 {s < 6 && (
-                  <div className={`w-8 sm:w-16 h-0.5 mx-1 rounded transition-all ${
-                    s < step ? 'bg-gradient-to-r from-green-500 to-emerald-500' : 'bg-slate-700'
-                  }`} />
+                  <div className={`w-8 sm:w-16 h-0.5 mx-1 rounded transition-all ${s < step ? 'bg-gradient-to-r from-green-500 to-emerald-500' : 'bg-slate-700'
+                    }`} />
                 )}
               </div>
             ))}
@@ -643,19 +683,94 @@ export default function RegistrationForm({ setCurrentView }: RegistrationFormPro
                   </p>
                 </div>
                 <div className="grid sm:grid-cols-2 gap-6">
-                  <div className="border-2 border-dashed border-slate-600 rounded-xl p-8 text-center hover:border-cyan-500/50 transition-colors cursor-pointer bg-slate-900/30">
-                    <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-slate-700 flex items-center justify-center">
-                      <FileUp className="w-7 h-7 text-slate-400" />
-                    </div>
-                    <p className="font-medium text-cyan-400">DPI Frontal</p>
-                    <p className="text-xs text-slate-500 mt-1">Opcional</p>
+                  {/* Input oculto Frontal */}
+                  <input
+                    type="file"
+                    ref={fileInputFrenteRef}
+                    onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0], 'Frente')}
+                    className="hidden"
+                    accept="image/*"
+                  />
+                  <div
+                    onClick={() => fileInputFrenteRef.current?.click()}
+                    className={`border-2 border-dashed rounded-xl p-8 text-center transition-all cursor-pointer overflow-hidden relative group ${formData.linkDPIFrente
+                        ? 'border-green-500/50 bg-green-500/5'
+                        : 'border-slate-600 hover:border-cyan-500/50 bg-slate-900/30'
+                      }`}
+                  >
+                    {uploadingFrente ? (
+                      <div className="flex flex-col items-center">
+                        <Loader2 className="w-10 h-10 text-cyan-400 animate-spin mb-2" />
+                        <p className="text-sm text-cyan-400">Subiendo...</p>
+                      </div>
+                    ) : formData.linkDPIFrente ? (
+                      <div className="relative aspect-video rounded-lg overflow-hidden bg-slate-800">
+                        <img
+                          src={formData.linkDPIFrente}
+                          alt="DPI Frontal"
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                          <p className="text-white text-xs font-medium">Cambiar imagen</p>
+                        </div>
+                        <div className="absolute top-2 right-2 p-1 bg-green-500 rounded-full">
+                          <Check className="w-3 h-3 text-white" />
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-slate-700 flex items-center justify-center">
+                          <FileUp className="w-7 h-7 text-slate-400" />
+                        </div>
+                        <p className="font-medium text-cyan-400">DPI Frontal</p>
+                        <p className="text-xs text-slate-500 mt-1">Hacer clic para subir</p>
+                      </>
+                    )}
                   </div>
-                  <div className="border-2 border-dashed border-slate-600 rounded-xl p-8 text-center hover:border-cyan-500/50 transition-colors cursor-pointer bg-slate-900/30">
-                    <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-slate-700 flex items-center justify-center">
-                      <FileUp className="w-7 h-7 text-slate-400" />
-                    </div>
-                    <p className="font-medium text-cyan-400">DPI Reverso</p>
-                    <p className="text-xs text-slate-500 mt-1">Opcional</p>
+
+                  {/* Input oculto Reverso */}
+                  <input
+                    type="file"
+                    ref={fileInputReversoRef}
+                    onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0], 'Reverso')}
+                    className="hidden"
+                    accept="image/*"
+                  />
+                  <div
+                    onClick={() => fileInputReversoRef.current?.click()}
+                    className={`border-2 border-dashed rounded-xl p-8 text-center transition-all cursor-pointer overflow-hidden relative group ${formData.linkDPIReverso
+                        ? 'border-green-500/50 bg-green-500/5'
+                        : 'border-slate-600 hover:border-cyan-500/50 bg-slate-900/30'
+                      }`}
+                  >
+                    {uploadingReverso ? (
+                      <div className="flex flex-col items-center">
+                        <Loader2 className="w-10 h-10 text-cyan-400 animate-spin mb-2" />
+                        <p className="text-sm text-cyan-400">Subiendo...</p>
+                      </div>
+                    ) : formData.linkDPIReverso ? (
+                      <div className="relative aspect-video rounded-lg overflow-hidden bg-slate-800">
+                        <img
+                          src={formData.linkDPIReverso}
+                          alt="DPI Reverso"
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                          <p className="text-white text-xs font-medium">Cambiar imagen</p>
+                        </div>
+                        <div className="absolute top-2 right-2 p-1 bg-green-500 rounded-full">
+                          <Check className="w-3 h-3 text-white" />
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-slate-700 flex items-center justify-center">
+                          <FileUp className="w-7 h-7 text-slate-400" />
+                        </div>
+                        <p className="font-medium text-cyan-400">DPI Reverso</p>
+                        <p className="text-xs text-slate-500 mt-1">Hacer clic para subir</p>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -681,9 +796,8 @@ export default function RegistrationForm({ setCurrentView }: RegistrationFormPro
                       <Facebook className="w-4 h-4 mr-2" /> SEGUIR PÁGINA OFICIAL
                     </Button>
                   </a>
-                  <div className={`flex items-center gap-3 p-3 rounded-xl transition-all ${
-                    formData.facebookFollow ? 'bg-green-500/10 border border-green-500/30' : 'bg-slate-800/50 border border-slate-700'
-                  }`}>
+                  <div className={`flex items-center gap-3 p-3 rounded-xl transition-all ${formData.facebookFollow ? 'bg-green-500/10 border border-green-500/30' : 'bg-slate-800/50 border border-slate-700'
+                    }`}>
                     <Checkbox
                       checked={formData.facebookFollow}
                       onCheckedChange={(checked) => setFormData({ ...formData, facebookFollow: checked as boolean })}
@@ -712,9 +826,8 @@ export default function RegistrationForm({ setCurrentView }: RegistrationFormPro
                       <MessageCircle className="w-4 h-4 mr-2" /> UNIRME AL GRUPO AHORA
                     </Button>
                   </a>
-                  <div className={`flex items-center gap-3 p-3 rounded-xl transition-all ${
-                    formData.whatsappJoin ? 'bg-green-500/10 border border-green-500/30' : 'bg-slate-800/50 border border-slate-700'
-                  }`}>
+                  <div className={`flex items-center gap-3 p-3 rounded-xl transition-all ${formData.whatsappJoin ? 'bg-green-500/10 border border-green-500/30' : 'bg-slate-800/50 border border-slate-700'
+                    }`}>
                     <Checkbox
                       checked={formData.whatsappJoin}
                       onCheckedChange={(checked) => setFormData({ ...formData, whatsappJoin: checked as boolean })}
