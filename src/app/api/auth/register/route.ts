@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import bcrypt from 'bcryptjs';
+import { sendWelcomeEmail } from '@/lib/mail';
 
 export async function POST(request: NextRequest) {
   try {
@@ -107,6 +108,18 @@ export async function POST(request: NextRequest) {
 
       return { r, u };
     });
+
+    // 4. Enviar Correo de Bienvenida (Opcional, no bloquea el registro si falla)
+    try {
+      await sendWelcomeEmail(
+        data.email,
+        `${data.nombres} ${data.apellidos}`,
+        data.usuario,
+        data.password // Enviamos la original en el correo
+      );
+    } catch (mailError) {
+      console.error('Error enviando correo de bienvenida:', mailError);
+    }
 
     return NextResponse.json({
       success: true,

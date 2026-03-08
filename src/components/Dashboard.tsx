@@ -863,8 +863,14 @@ export default function Dashboard({ user }: DashboardProps) {
                               {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                             </Button>
                           </div>
-                          {!showPassword && detailDialog.password?.startsWith('$2') && (
-                            <p className="text-[10px] text-slate-600 mt-1 italic">(Encriptada del sistema anterior)</p>
+                          {detailDialog.password?.startsWith('$2') ? (
+                            <p className="text-[10px] text-amber-500 mt-1 italic">
+                              ⚠️ Encriptada (Registro antiguo). No se puede visualizar.
+                            </p>
+                          ) : (
+                            <p className="text-[10px] text-green-500 mt-1 italic">
+                              ✓ Contraseña original (Nueva tecnología)
+                            </p>
                           )}
                         </div>
                       </div>
