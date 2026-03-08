@@ -23,82 +23,98 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Verificar si el usuario ya existe
-    const existingUser = await db.registro.findFirst({
-      where: {
-        OR: [
-          { dpi: data.dpi },
-          { usuario: data.usuario },
-          { email: data.email }
-        ]
-      }
-    });
+    // Verificar si el usuario ya existe en Registro o en Usuario
+    const [existingReg, existingUserTable] = await Promise.all([
+      db.registro.findFirst({
+        where: {
+          OR: [
+            { dpi: data.dpi },
+            { usuario: data.usuario },
+            { email: data.email }
+          ]
+        }
+      }),
+      db.usuario.findFirst({
+        where: {
+          OR: [
+            { dpi: data.dpi },
+            { usuario: data.usuario }
+          ]
+        }
+      })
+    ]);
 
-    if (existingUser) {
+    if (existingReg || existingUserTable) {
       return NextResponse.json(
-        { success: false, message: 'El DPI, usuario o email ya están registrados' },
+        { success: false, message: 'El DPI, usuario o email ya están registrados en el sistema' },
         { status: 400 }
       );
     }
 
-    // Hashear la contraseña
+    // 1. Hashear la contraseña
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
-    // Crear el registro
-    const registro = await db.registro.create({
-      data: {
-        patrocinadorNombre: data.patrocinadorNombre,
-        patrocinadorCodigo: data.patrocinadorCodigo,
-        nombres: data.nombres,
-        apellidos: data.apellidos,
-        dpi: data.dpi,
-        nacimiento: data.nacimiento,
-        telefono: data.telefono,
-        email: data.email,
-        direccion: data.direccion,
-        pais: data.pais,
-        departamento: data.departamento,
-        municipio: data.municipio,
-        estadoCivil: data.estadoCivil,
-        tipoMembresia: data.tipoMembresia,
-        nombreConyuge: data.nombreConyuge || null,
-        dpiConyuge: data.dpiConyuge || null,
-        beneficiario: data.beneficiario || false,
-        usuario: data.usuario,
-        password: hashedPassword,
-        linkDPIFrente: data.linkDPIFrente || null,
-        linkDPIReverso: data.linkDPIReverso || null,
-        facebookFollow: data.facebookFollow || false,
-        whatsappJoin: data.whatsappJoin || false,
-        estado: 'pendiente'
-      }
-    });
-
-    // Crear usuario para acceso al sistema
-    const rol = data.tipoMembresia.toLowerCase().includes('emprendedor') 
-      ? 'emprendedor' 
+    // 2. Determinar el rol según el tipo de membresía
+    const rol = data.tipoMembresia.toLowerCase().includes('emprendedor')
+      ? 'emprendedor'
       : data.tipoMembresia.toLowerCase().includes('distribuidor')
         ? 'distribuidor'
         : 'consumidor';
 
-    await db.usuario.create({
-      data: {
-        nombre: `${data.nombres} ${data.apellidos}`,
-        usuario: data.usuario,
-        password: hashedPassword,
-        rol: rol,
-        dpi: data.dpi,
-        usuarioId: registro.id
-      }
+    // 3. Crear Usuario y Registro en una Transacción Atómica
+    const result = await db.$transaction(async (tx) => {
+      // 3.1 Crear el Usuario (Credenciales de acceso)
+      const u = await tx.usuario.create({
+        data: {
+          nombre: `${data.nombres} ${data.apellidos}`,
+          usuario: data.usuario,
+          password: hashedPassword,
+          rol: rol,
+          dpi: data.dpi,
+        }
+      });
+
+      // 3.2 Crear el Registro (Datos de membresía) vinculado al Usuario
+      const r = await tx.registro.create({
+        data: {
+          patrocinadorNombre: data.patrocinadorNombre,
+          patrocinadorCodigo: data.patrocinadorCodigo,
+          nombres: data.nombres,
+          apellidos: data.apellidos,
+          dpi: data.dpi,
+          nacimiento: data.nacimiento,
+          telefono: data.telefono,
+          email: data.email,
+          direccion: data.direccion,
+          pais: data.pais,
+          departamento: data.departamento,
+          municipio: data.municipio,
+          estadoCivil: data.estadoCivil,
+          tipoMembresia: data.tipoMembresia,
+          nombreConyuge: data.nombreConyuge || null,
+          dpiConyuge: data.dpiConyuge || null,
+          beneficiario: data.beneficiario || false,
+          usuario: data.usuario,
+          password: hashedPassword,
+          linkDPIFrente: data.linkDPIFrente || null,
+          linkDPIReverso: data.linkDPIReverso || null,
+          facebookFollow: data.facebookFollow || false,
+          whatsappJoin: data.whatsappJoin || false,
+          estado: 'pendiente',
+          usuarioId: u.id
+        }
+      });
+
+      return { r, u };
     });
 
     return NextResponse.json({
       success: true,
       message: '¡Registro completado exitosamente! Tu acceso al panel será activado.',
       registro: {
-        id: registro.id,
-        nombres: registro.nombres,
-        apellidos: registro.apellidos
+        id: result.r.id,
+        nombres: result.r.nombres,
+        apellidos: result.r.apellidos
       }
     });
   } catch (error) {

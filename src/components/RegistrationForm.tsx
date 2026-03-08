@@ -52,6 +52,27 @@ export default function RegistrationForm({ setCurrentView }: RegistrationFormPro
     linkDPIReverso: ''
   });
 
+  // Cargar estado desde localStorage al montar
+  useEffect(() => {
+    const savedStep = localStorage.getItem('registration_step');
+    const savedData = localStorage.getItem('registration_data');
+
+    if (savedStep) setStep(parseInt(savedStep));
+    if (savedData) {
+      try {
+        setFormData(JSON.parse(savedData));
+      } catch (e) {
+        console.error('Error parsing saved registration data', e);
+      }
+    }
+  }, []);
+
+  // Guardar estado en localStorage cuando cambie
+  useEffect(() => {
+    localStorage.setItem('registration_step', step.toString());
+    localStorage.setItem('registration_data', JSON.stringify(formData));
+  }, [step, formData]);
+
   // Refs para inputs de archivos
   const fileInputFrenteRef = useRef<HTMLInputElement>(null);
   const fileInputReversoRef = useRef<HTMLInputElement>(null);
@@ -115,32 +136,34 @@ export default function RegistrationForm({ setCurrentView }: RegistrationFormPro
   // Efecto de confetti cuando el registro es exitoso
   useEffect(() => {
     if (success) {
-      // Confetti explosión
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 }
-      });
+      const duration = 5 * 1000;
+      const animationEnd = Date.now() + duration;
+      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0, colors: ['#22d3ee', '#14b8a6', '#ffffff'] };
 
-      // Confetti lateral izquierdo
-      setTimeout(() => {
-        confetti({
-          particleCount: 50,
-          angle: 60,
-          spread: 55,
-          origin: { x: 0 }
-        });
+      const randomInRange = (min: number, max: number) => {
+        return Math.random() * (max - min) + min;
+      };
+
+      const interval: any = setInterval(function () {
+        const timeLeft = animationEnd - Date.now();
+
+        if (timeLeft <= 0) {
+          return clearInterval(interval);
+        }
+
+        const particleCount = 50 * (timeLeft / duration);
+        // since particles fall down, start a bit higher than random
+        confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
+        confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
       }, 250);
 
-      // Confetti lateral derecho
-      setTimeout(() => {
-        confetti({
-          particleCount: 50,
-          angle: 120,
-          spread: 55,
-          origin: { x: 1 }
-        });
-      }, 400);
+      // Explosión inicial grande
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#22d3ee', '#14b8a6', '#ffffff']
+      });
     }
   }, [success]);
 
@@ -177,6 +200,9 @@ export default function RegistrationForm({ setCurrentView }: RegistrationFormPro
 
       if (data.success) {
         setSuccess(true);
+        // Limpiar persistencia tras éxito
+        localStorage.removeItem('registration_step');
+        localStorage.removeItem('registration_data');
       } else {
         setError(data.message);
       }
@@ -694,8 +720,8 @@ export default function RegistrationForm({ setCurrentView }: RegistrationFormPro
                   <div
                     onClick={() => fileInputFrenteRef.current?.click()}
                     className={`border-2 border-dashed rounded-xl p-8 text-center transition-all cursor-pointer overflow-hidden relative group ${formData.linkDPIFrente
-                        ? 'border-green-500/50 bg-green-500/5'
-                        : 'border-slate-600 hover:border-cyan-500/50 bg-slate-900/30'
+                      ? 'border-green-500/50 bg-green-500/5'
+                      : 'border-slate-600 hover:border-cyan-500/50 bg-slate-900/30'
                       }`}
                   >
                     {uploadingFrente ? (
@@ -739,8 +765,8 @@ export default function RegistrationForm({ setCurrentView }: RegistrationFormPro
                   <div
                     onClick={() => fileInputReversoRef.current?.click()}
                     className={`border-2 border-dashed rounded-xl p-8 text-center transition-all cursor-pointer overflow-hidden relative group ${formData.linkDPIReverso
-                        ? 'border-green-500/50 bg-green-500/5'
-                        : 'border-slate-600 hover:border-cyan-500/50 bg-slate-900/30'
+                      ? 'border-green-500/50 bg-green-500/5'
+                      : 'border-slate-600 hover:border-cyan-500/50 bg-slate-900/30'
                       }`}
                   >
                     {uploadingReverso ? (

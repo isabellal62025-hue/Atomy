@@ -16,9 +16,30 @@ import Footer from '@/components/Footer';
 import ExitPopup from '@/components/ExitPopup';
 
 export default function Home() {
-  const [currentView, setCurrentView] = useState('landing');
-  const [productCategory, setProductCategory] = useState('belleza');
-  const [user, setUser] = useState<{ nombre: string; rol: string; dpi: string } | null>(null);
+  // Cargar vista y usuario guardados al inicio
+  useEffect(() => {
+    const savedView = localStorage.getItem('current_view');
+    const savedUser = localStorage.getItem('current_user');
+
+    if (savedView) setCurrentView(savedView);
+    if (savedUser) {
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch (e) {
+        console.error('Error parsing saved user', e);
+      }
+    }
+  }, []);
+
+  // Guardar vista y usuario cuando cambien
+  useEffect(() => {
+    localStorage.setItem('current_view', currentView);
+    if (user) {
+      localStorage.setItem('current_user', JSON.stringify(user));
+    } else {
+      localStorage.removeItem('current_user');
+    }
+  }, [currentView, user]);
 
   // Initialize seed data on first load
   useEffect(() => {
@@ -34,11 +55,11 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
-      <Header 
-        currentView={currentView} 
-        setCurrentView={setCurrentView} 
-        user={user} 
-        setUser={setUser} 
+      <Header
+        currentView={currentView}
+        setCurrentView={setCurrentView}
+        user={user}
+        setUser={setUser}
       />
 
       <main className="flex-grow">
@@ -47,18 +68,18 @@ export default function Home() {
             <HeroSection setCurrentView={setCurrentView} />
             <WhyAtomy />
             <CountriesCarousel />
-            <ProductsSection 
-              setCurrentView={setCurrentView} 
-              setProductCategory={setProductCategory} 
+            <ProductsSection
+              setCurrentView={setCurrentView}
+              setProductCategory={setProductCategory}
             />
             <VideosSection />
           </>
         )}
 
         {currentView === 'productos-categoria' && (
-          <ProductsCategoryPage 
-            categoryId={productCategory} 
-            setCurrentView={setCurrentView} 
+          <ProductsCategoryPage
+            categoryId={productCategory}
+            setCurrentView={setCurrentView}
           />
         )}
 
@@ -76,10 +97,10 @@ export default function Home() {
       </main>
 
       <Footer />
-      
+
       {/* Astro AI Chat - Available on all views */}
       <AstroChat />
-      
+
       {/* Exit Intent Popup */}
       <ExitPopup setCurrentView={setCurrentView} />
     </div>
