@@ -6,7 +6,15 @@ export async function GET(request: NextRequest) {
     const { searchParams } = request.nextUrl;
     const userRole = searchParams.get('role');
     const userDpi = searchParams.get('dpi');
-    const userCodigo = searchParams.get('codigo');
+    let userCodigo = searchParams.get('codigo');
+
+    // Si falta el código de usuario (sesiones viejas o llega como 'undefined'), buscarlo por DPI
+    if ((!userCodigo || userCodigo === 'undefined' || userCodigo === 'null') && userDpi) {
+      const dbUser = await db.usuario.findFirst({
+        where: { dpi: userDpi }
+      });
+      if (dbUser) userCodigo = dbUser.usuario;
+    }
 
     // Obtener todos los registros
     const registros = await db.registro.findMany({
@@ -65,9 +73,9 @@ export async function GET(request: NextRequest) {
       records: registrosConReferidos,
       stats: {
         total: userRole === 'admin' ? total : filteredRegistros.length,
-        distributors: userRole === 'admin' ? distribuidores : filteredRegistros.filter(r => r.tipo.toLowerCase() === 'distribuidor').length,
-        entrepreneurs: userRole === 'admin' ? emprendedores : filteredRegistros.filter(r => r.tipo.toLowerCase() === 'emprendedor').length,
-        consumers: userRole === 'admin' ? consumidores : filteredRegistros.filter(r => r.tipo.toLowerCase() === 'consumidor').length,
+        distributors: userRole === 'admin' ? distribuidores : filteredRegistros.filter(r => r.tipoMembresia.toLowerCase() === 'distribuidor').length,
+        entrepreneurs: userRole === 'admin' ? emprendedores : filteredRegistros.filter(r => r.tipoMembresia.toLowerCase() === 'emprendedor').length,
+        consumers: userRole === 'admin' ? consumidores : filteredRegistros.filter(r => r.tipoMembresia.toLowerCase() === 'consumidor').length,
       }
     });
   } catch (error) {
