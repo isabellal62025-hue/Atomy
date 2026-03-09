@@ -43,16 +43,23 @@ export default function AstroChat() {
         body: JSON.stringify({ message: userMessage, isFirstMessage })
       });
 
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+
       const data = await res.json();
 
       if (data.success) {
         setMessages(prev => [...prev, { role: 'assistant', content: data.response }]);
         setIsFirstMessage(false);
+      } else {
+        throw new Error(data.message || 'Error en la respuesta del servidor');
       }
     } catch (error) {
-      setMessages(prev => [...prev, { 
-        role: 'assistant', 
-        content: 'Lo siento, ocurrió un error. Por favor intenta de nuevo.' 
+      console.error('Error en AstroChat:', error);
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: 'Lo siento, tuve un problema al conectar con mi cerebro artificial. Por favor, intenta de nuevo en unos momentos o contáctanos por WhatsApp. 🙏'
       }]);
     } finally {
       setLoading(false);
@@ -71,11 +78,10 @@ export default function AstroChat() {
       {/* Floating Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`fixed bottom-6 right-6 w-16 h-16 rounded-full shadow-2xl flex items-center justify-center z-50 transition-all duration-500 ${
-          isOpen 
-            ? 'bg-slate-700 rotate-0' 
+        className={`fixed bottom-6 right-6 w-16 h-16 rounded-full shadow-2xl flex items-center justify-center z-50 transition-all duration-500 ${isOpen
+            ? 'bg-slate-700 rotate-0'
             : 'bg-gradient-to-r from-cyan-500 to-teal-500 hover:scale-110 hover:rotate-12'
-        }`}
+          }`}
       >
         {isOpen ? (
           <X className="w-6 h-6 text-white" />
@@ -88,19 +94,18 @@ export default function AstroChat() {
       </button>
 
       {/* Chat Window */}
-      <div className={`fixed bottom-24 right-6 w-[380px] max-w-[calc(100vw-48px)] bg-white rounded-3xl shadow-2xl z-40 overflow-hidden transition-all duration-500 ${
-        isOpen 
-          ? 'opacity-100 translate-y-0 pointer-events-auto' 
+      <div className={`fixed bottom-24 right-6 w-[380px] max-w-[calc(100vw-48px)] bg-white rounded-3xl shadow-2xl z-40 overflow-hidden transition-all duration-500 ${isOpen
+          ? 'opacity-100 translate-y-0 pointer-events-auto'
           : 'opacity-0 translate-y-4 pointer-events-none'
-      }`}>
+        }`}>
         {/* Header */}
         <div className="bg-gradient-to-r from-cyan-500 to-teal-500 p-4 text-white flex items-center justify-between">
           <div className="flex items-center gap-3">
             {/* Avatar de Astro */}
             <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-lg overflow-hidden">
-              <img 
-                src="/astro-icon.png" 
-                alt="Astro" 
+              <img
+                src="/astro-icon.png"
+                alt="Astro"
                 className="w-full h-full object-cover"
               />
             </div>
@@ -132,9 +137,9 @@ export default function AstroChat() {
             <div className="text-center py-6">
               {/* Avatar grande */}
               <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-cyan-100 to-teal-100 flex items-center justify-center shadow-inner overflow-hidden">
-                <img 
-                  src="/astro-icon.png" 
-                  alt="Astro" 
+                <img
+                  src="/astro-icon.png"
+                  alt="Astro"
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -160,18 +165,17 @@ export default function AstroChat() {
               >
                 {msg.role === 'assistant' && (
                   <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center flex-shrink-0 overflow-hidden shadow-sm border border-slate-100">
-                    <img 
-                      src="/astro-icon.png" 
-                      alt="Astro" 
+                    <img
+                      src="/astro-icon.png"
+                      alt="Astro"
                       className="w-full h-full object-cover"
                     />
                   </div>
                 )}
-                <div className={`max-w-[75%] p-3 rounded-2xl ${
-                  msg.role === 'user'
+                <div className={`max-w-[75%] p-3 rounded-2xl ${msg.role === 'user'
                     ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-white rounded-br-md'
                     : 'bg-white text-slate-800 rounded-bl-md shadow-sm border border-slate-100'
-                }`}>
+                  }`}>
                   <p className="text-sm leading-relaxed">{msg.content}</p>
                 </div>
                 {msg.role === 'user' && (
@@ -185,9 +189,9 @@ export default function AstroChat() {
           {loading && (
             <div className="flex justify-start items-end gap-2">
               <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center flex-shrink-0 overflow-hidden shadow-sm border border-slate-100">
-                <img 
-                  src="/astro-icon.png" 
-                  alt="Astro" 
+                <img
+                  src="/astro-icon.png"
+                  alt="Astro"
                   className="w-full h-full object-cover"
                 />
               </div>
