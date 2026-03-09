@@ -100,7 +100,10 @@ export default function Home() {
         )}
       </main>
 
-      <Footer />
+      <Footer
+        setCurrentView={setCurrentView}
+        setProductCategory={setProductCategory}
+      />
 
       {/* Astro AI Chat - Available on all views */}
       <AstroChat />

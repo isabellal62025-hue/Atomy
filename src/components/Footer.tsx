@@ -1,12 +1,12 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { 
-  ArrowUp, 
-  Mail, 
-  MapPin, 
-  Facebook, 
-  Instagram, 
+import {
+  ArrowUp,
+  Mail,
+  MapPin,
+  Facebook,
+  Instagram,
   MessageCircle,
   Shield,
   Award,
@@ -16,7 +16,13 @@ import {
   Globe
 } from 'lucide-react';
 
-export default function Footer() {
+interface FooterProps {
+  setCurrentView?: (view: string) => void;
+  setProductCategory?: (category: string) => void;
+}
+
+export default function Footer({ setCurrentView, setProductCategory }: FooterProps) {
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -24,20 +30,20 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   const socialLinks = [
-    { 
-      icon: Facebook, 
+    {
+      icon: Facebook,
       href: 'https://www.facebook.com/profile.php?id=61586482017672',
       color: 'hover:bg-blue-500',
       label: 'Facebook'
     },
-    { 
-      icon: MessageCircle, 
+    {
+      icon: MessageCircle,
       href: 'https://chat.whatsapp.com/Jr5SNg8WGif1QRPp0SON8Y',
       color: 'hover:bg-green-500',
       label: 'WhatsApp'
     },
-    { 
-      icon: Instagram, 
+    {
+      icon: Instagram,
       href: 'https://www.instagram.com/atomyglobal',
       color: 'hover:bg-pink-500',
       label: 'Instagram'
@@ -51,11 +57,12 @@ export default function Footer() {
   ];
 
   const categories = [
-    { label: 'Higiene Personal' },
-    { label: 'Cuidado de la Piel' },
-    { label: 'Suplementos' },
-    { label: 'Bienestar Diario' },
+    { label: 'Higiene Personal', id: 'cuidado-personal' },
+    { label: 'Cuidado de la Piel', id: 'belleza' },
+    { label: 'Suplementos', id: 'salud' },
+    { label: 'Bienestar Diario', id: 'hogar' },
   ];
+
 
   const trustItems = [
     { icon: Shield, label: 'Registro Seguro' },
@@ -80,7 +87,7 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-slate-400 mb-6 leading-relaxed text-sm">
-              Transformando vidas a través de productos premium y oportunidades de negocio 
+              Transformando vidas a través de productos premium y oportunidades de negocio
               que democratizan el éxito financiero.
             </p>
             <div className="flex gap-3">
@@ -108,8 +115,8 @@ export default function Footer() {
             <ul className="space-y-3">
               {quickLinks.map((link, index) => (
                 <li key={index}>
-                  <button 
-                    onClick={() => document.getElementById(link.id)?.scrollIntoView({ behavior: 'smooth' })} 
+                  <button
+                    onClick={() => document.getElementById(link.id)?.scrollIntoView({ behavior: 'smooth' })}
                     className="text-slate-400 hover:text-cyan-400 transition-colors text-sm flex items-center gap-2 group"
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-slate-600 group-hover:bg-cyan-400 transition-colors"></span>
@@ -129,10 +136,19 @@ export default function Footer() {
             <ul className="space-y-3">
               {categories.map((cat, index) => (
                 <li key={index}>
-                  <span className="text-slate-400 text-sm flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-slate-600"></span>
+                  <button
+                    onClick={() => {
+                      if (setCurrentView && setProductCategory && cat.id) {
+                        setProductCategory(cat.id);
+                        setCurrentView('productos-categoria');
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }
+                    }}
+                    className="text-slate-400 hover:text-teal-400 transition-colors text-sm flex items-center gap-2 group"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-slate-600 group-hover:bg-teal-400 transition-colors"></span>
                     {cat.label}
-                  </span>
+                  </button>
                 </li>
               ))}
             </ul>
