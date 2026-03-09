@@ -14,7 +14,7 @@ const features = [
   {
     icon: DollarSign,
     title: 'Precio Absoluto',
-    description: 'Compromiso de entrega de productos premium a precios inmejorables, optimizando la economía de cada hogar miembro.',
+    description: 'Compromiso de entrega de productos orgánicos a precios inmejorables, optimizando la economía de cada hogar miembro.',
     color: 'from-emerald-400 to-green-400',
     bgColor: 'from-emerald-500/10 to-green-500/10',
     borderColor: 'border-emerald-500/20 hover:border-emerald-500/40'
@@ -53,16 +53,16 @@ export default function WhyAtomy() {
             <Sparkles className="w-4 h-4 text-cyan-400" />
             <span className="text-sm font-medium text-cyan-300">¿Por qué elegirnos?</span>
           </div>
-          
+
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
             Tres Pilares que nos hacen{' '}
             <span className="bg-gradient-to-r from-cyan-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent">
               Únicos
             </span>
           </h2>
-          
+
           <p className="text-lg text-slate-400 max-w-3xl mx-auto">
-            En Atomy combinamos calidad premium, precios accesibles y una oportunidad de negocio 
+            En Atomy combinamos productos orgánicos, precios accesibles y una oportunidad de negocio
             sin precedentes para tu éxito financiero.
           </p>
         </div>
@@ -76,12 +76,12 @@ export default function WhyAtomy() {
             >
               {/* Glow effect */}
               <div className={`absolute -inset-0.5 bg-gradient-to-r ${feature.color} rounded-3xl opacity-0 group-hover:opacity-10 blur transition-all duration-500`}></div>
-              
+
               {/* Icon */}
               <div className={`relative w-16 h-16 rounded-2xl bg-gradient-to-r ${feature.color} flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                 <feature.icon className="w-8 h-8 text-white" />
               </div>
-              
+
               {/* Content */}
               <h3 className="text-xl font-bold text-white mb-3 group-hover:text-cyan-300 transition-colors">
                 {feature.title}
@@ -89,7 +89,7 @@ export default function WhyAtomy() {
               <p className="text-slate-400 leading-relaxed">
                 {feature.description}
               </p>
-              
+
               {/* Bottom accent */}
               <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${feature.color} rounded-b-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
             </div>
@@ -101,8 +101,8 @@ export default function WhyAtomy() {
           <p className="text-slate-500 text-sm mb-6">Certificaciones y Reconocimientos</p>
           <div className="flex flex-wrap justify-center items-center gap-4">
             {certifications.map((cert, index) => (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-800/50 border border-slate-700/50 hover:border-slate-600 transition-all duration-300 hover:-translate-y-1"
               >
                 <cert.icon className={`w-5 h-5 ${cert.color}`} />
@@ -119,7 +119,7 @@ export default function WhyAtomy() {
             { value: '27+', label: 'Sedes activas' },
             { value: '52+', label: 'Países' },
             { value: '10M+', label: 'Miembros globales' },
-            { value: '500+', label: 'Productos premium' },
+            { value: '500+', label: 'Productos orgánicos' },
           ].map((stat, index) => (
             <div key={index} className="text-center p-6 rounded-2xl bg-slate-800/30 border border-slate-700/30">
               <div className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent mb-1">

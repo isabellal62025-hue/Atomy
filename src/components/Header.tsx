@@ -58,7 +58,7 @@ export default function Header({ currentView, setCurrentView, user, setUser }: H
   const navItems = [
     { id: 'landing', label: 'Inicio' },
     { id: 'experiencias', label: 'Experiencias' },
-    { id: 'registro', label: 'Registro' },
+    { id: 'registro', label: 'Membresía' },
   ];
 
   return (
@@ -86,8 +86,8 @@ export default function Header({ currentView, setCurrentView, user, setUser }: H
                   key={item.id}
                   onClick={() => setCurrentView(item.id)}
                   className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 ${currentView === item.id
-                      ? 'bg-gradient-to-r from-cyan-500/20 to-teal-500/20 text-cyan-300 border border-cyan-500/30'
-                      : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+                    ? 'bg-gradient-to-r from-cyan-500/20 to-teal-500/20 text-cyan-300 border border-cyan-500/30'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
                     }`}
                 >
                   {item.label}
@@ -99,8 +99,8 @@ export default function Header({ currentView, setCurrentView, user, setUser }: H
                   <button
                     onClick={() => setCurrentView('dashboard')}
                     className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 ${currentView === 'dashboard'
-                        ? 'bg-gradient-to-r from-cyan-500/20 to-teal-500/20 text-cyan-300 border border-cyan-500/30'
-                        : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+                      ? 'bg-gradient-to-r from-cyan-500/20 to-teal-500/20 text-cyan-300 border border-cyan-500/30'
+                      : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
                       }`}
                   >
                     <LayoutDashboard className="w-4 h-4" />
@@ -156,8 +156,8 @@ export default function Header({ currentView, setCurrentView, user, setUser }: H
                   key={item.id}
                   onClick={() => { setCurrentView(item.id); setMobileMenuOpen(false); }}
                   className={`block w-full text-left px-4 py-3 rounded-lg transition-all ${currentView === item.id
-                      ? 'bg-gradient-to-r from-cyan-500/20 to-teal-500/20 text-cyan-300'
-                      : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+                    ? 'bg-gradient-to-r from-cyan-500/20 to-teal-500/20 text-cyan-300'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
                     }`}
                 >
                   {item.label}
@@ -245,7 +245,7 @@ export default function Header({ currentView, setCurrentView, user, setUser }: H
                 onClick={() => { setLoginOpen(false); setCurrentView('registro'); }}
                 className="text-cyan-400 hover:text-cyan-300 hover:underline"
               >
-                Regístrate aquí
+                Obtén tu membresía aquí
               </button>
             </p>
           </form>

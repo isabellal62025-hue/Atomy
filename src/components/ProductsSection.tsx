@@ -11,7 +11,7 @@ const categorias = [
   {
     id: 'belleza',
     nombre: 'Belleza',
-    descripcion: 'Cuidado facial, maquillaje y productos de belleza premium',
+    descripcion: 'Cuidado facial, maquillaje y productos de belleza orgánicos',
     icon: SparkleIcon,
     color: 'from-pink-500 to-rose-500',
     bgColor: 'from-pink-500/10 to-rose-500/10',
@@ -74,7 +74,7 @@ export default function ProductsSection({ setCurrentView, setProductCategory }: 
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-cyan-500/10 to-teal-500/10 border border-cyan-500/20 mb-6">
             <Sparkles className="w-4 h-4 text-cyan-400" />
-            <span className="text-sm font-medium text-cyan-300">Catálogo Premium</span>
+            <span className="text-sm font-medium text-cyan-300">Catálogo Orgánico</span>
           </div>
 
           <h2 className="text-4xl sm:text-5xl font-bold text-white mb-6">
@@ -86,7 +86,7 @@ export default function ProductsSection({ setCurrentView, setProductCategory }: 
 
           <p className="text-lg text-slate-400 max-w-2xl mx-auto">
             Explora nuestra amplia gama de productos organizados por categorías.
-            Calidad premium coreana al mejor precio.
+            Calidad orgánica coreana al mejor precio.
           </p>
         </div>
 
@@ -166,7 +166,7 @@ export default function ProductsSection({ setCurrentView, setProductCategory }: 
                 </div>
               ))}
             </div>
-            <span className="text-slate-300 text-sm">+500 productos premium disponibles</span>
+            <span className="text-slate-300 text-sm">+500 productos orgánicos disponibles</span>
           </div>
         </div>
       </div>

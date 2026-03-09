@@ -57,35 +57,35 @@ class Particle {
     let dy = mouse.y - this.y;
     let distance = Math.sqrt(dx * dx + dy * dy);
     let maxDistance = mouse.radius;
-    
+
     // Strong attraction force
     if (distance < maxDistance && distance > 0) {
       let force = (maxDistance - distance) / maxDistance;
       force = force * force;
       let directionX = dx / distance;
       let directionY = dy / distance;
-      
+
       this.vx += directionX * force * 3;
       this.vy += directionY * force * 3;
     }
-    
+
     // Constant floating movement
     const floatSpeed = 0.02;
     this.vx += Math.sin(time * floatSpeed + this.baseX * 0.01) * 0.05;
     this.vy += Math.cos(time * floatSpeed + this.baseY * 0.01) * 0.05;
-    
+
     this.vx += this.driftX * 0.01;
     this.vy += this.driftY * 0.01;
-    
+
     this.vx *= 0.95;
     this.vy *= 0.95;
-    
+
     this.x += this.vx;
     this.y += this.vy;
-    
+
     this.baseX += this.driftX * 0.1;
     this.baseY += this.driftY * 0.1;
-    
+
     // Wrap around screen
     const margin = 50;
     if (this.x < -margin) { this.x = window.innerWidth + margin; this.baseX = this.x; }
@@ -119,7 +119,7 @@ export default function HeroSection({ setCurrentView }: HeroSectionProps) {
       particlesRef.current = [];
       const colors = ['#c9a962', '#e0c97d', '#ffffff', '#a88b3d', '#d4af37'];
       const numberOfParticles = Math.floor((canvas.width * canvas.height) / 10000);
-      
+
       for (let i = 0; i < numberOfParticles; i++) {
         const size = Math.random() * 4 + 2;
         const x = Math.random() * canvas.width;
@@ -132,16 +132,16 @@ export default function HeroSection({ setCurrentView }: HeroSectionProps) {
     const animate = (timestamp: number) => {
       if (!ctx || !canvas) return;
       timeRef.current = timestamp;
-      
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
+
       for (let i = 0; i < particlesRef.current.length; i++) {
         particlesRef.current[i].draw(ctx);
         particlesRef.current[i].update(mouseRef.current, timestamp);
       }
-      
+
       connectParticles(ctx);
-      
+
       animationRef.current = requestAnimationFrame(animate);
     };
 
@@ -151,7 +151,7 @@ export default function HeroSection({ setCurrentView }: HeroSectionProps) {
           let dx = particlesRef.current[a].x - particlesRef.current[b].x;
           let dy = particlesRef.current[a].y - particlesRef.current[b].y;
           let distance = Math.sqrt(dx * dx + dy * dy);
-          
+
           if (distance < 120) {
             ctx.strokeStyle = `rgba(201, 169, 98, ${0.2 - distance / 600})`;
             ctx.lineWidth = 0.5;
@@ -215,7 +215,7 @@ export default function HeroSection({ setCurrentView }: HeroSectionProps) {
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#c9a962]/5 rounded-full blur-3xl" />
         <div className="absolute top-1/2 left-0 w-72 h-72 bg-[#c9a962]/3 rounded-full blur-3xl" />
       </div>
-      
+
       {/* Interactive Particle Canvas */}
       <canvas
         ref={canvasRef}
@@ -236,25 +236,25 @@ export default function HeroSection({ setCurrentView }: HeroSectionProps) {
             </h1>
             <div className="absolute -inset-4 bg-[#c9a962]/10 blur-3xl -z-10 rounded-full" />
           </div>
-          
+
           {/* Subtitle */}
           <p className="text-xl sm:text-2xl text-white/70 max-w-2xl mx-auto leading-relaxed">
-            Únete a la red de consumidores más grande del mundo. Productos orgánicos de necesidades diarias, 
+            Únete a la red de consumidores más grande del mundo. Productos orgánicos de necesidades diarias,
             con tecnología coreana y un sistema que{' '}
             <span className="text-[#c9a962] font-medium">democratiza el éxito</span>.
           </p>
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
-            <Button 
+            <Button
               onClick={() => setCurrentView('registro')}
               size="lg"
               className="group relative bg-gradient-to-r from-[#c9a962] to-[#a88b3d] hover:from-[#e0c97d] hover:to-[#c9a962] text-[#0a1628] px-10 py-7 text-lg font-semibold rounded-full shadow-2xl shadow-[#c9a962]/30 hover:shadow-[#c9a962]/50 transition-all duration-500 hover:scale-105"
             >
-              <span className="relative z-10">Registrarme Gratis</span>
+              <span className="relative z-10">Membresía Gratis</span>
               <ArrowRight className="ml-2 w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
             </Button>
-            <Button 
+            <Button
               variant="outline"
               size="lg"
               className="px-10 py-7 text-lg rounded-full border-2 border-[#c9a962] text-[#c9a962] bg-transparent hover:bg-[#c9a962] hover:text-[#0a1628] backdrop-blur-sm transition-all"
@@ -269,12 +269,12 @@ export default function HeroSection({ setCurrentView }: HeroSectionProps) {
             <div className="relative group">
               {/* Animated glow background */}
               <div className="absolute -inset-1 bg-gradient-to-r from-[#c9a962]/40 via-[#e0c97d]/30 to-[#c9a962]/40 rounded-2xl blur-xl opacity-60 group-hover:opacity-100 transition duration-1000 animate-pulse-slow"></div>
-              
+
               {/* Main card */}
               <div className="relative bg-gradient-to-br from-[#0f1f35] to-[#0a1628] rounded-2xl p-6 border border-[#c9a962]/20 shadow-2xl overflow-hidden">
                 {/* Animated shimmer effect */}
                 <div className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-[#c9a962]/10 to-transparent"></div>
-                
+
                 {/* Floating stars animation */}
                 <div className="absolute top-2 left-4 animate-float-delayed-1">
                   <Star className="w-4 h-4 text-[#c9a962] fill-[#c9a962]" />
@@ -288,7 +288,7 @@ export default function HeroSection({ setCurrentView }: HeroSectionProps) {
                 <div className="absolute bottom-2 right-4 animate-float">
                   <Star className="w-4 h-4 text-[#c9a962] fill-[#c9a962]" />
                 </div>
-                
+
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                   {/* Animated icon */}
                   <div className="relative">
@@ -297,7 +297,7 @@ export default function HeroSection({ setCurrentView }: HeroSectionProps) {
                       <Gift className="w-8 h-8 text-[#0a1628]" />
                     </div>
                   </div>
-                  
+
                   {/* Text with gradient animation */}
                   <div className="text-center sm:text-left">
                     <h3 className="text-2xl sm:text-3xl font-bold">
@@ -332,13 +332,13 @@ export default function HeroSection({ setCurrentView }: HeroSectionProps) {
               <div className="w-14 h-14 rounded-2xl bg-[#c9a962]/10 border border-[#c9a962]/20 flex items-center justify-center group-hover:scale-110 group-hover:bg-[#c9a962]/20 transition-all duration-300">
                 <Shield className="w-7 h-7 text-[#c9a962]" />
               </div>
-              <span className="text-sm font-medium text-white/80">Registro Gratuito</span>
+              <span className="text-sm font-medium text-white/80">Membresía Gratuita</span>
             </div>
             <div className="flex flex-col items-center gap-3 group">
               <div className="w-14 h-14 rounded-2xl bg-[#c9a962]/10 border border-[#c9a962]/20 flex items-center justify-center group-hover:scale-110 group-hover:bg-[#c9a962]/20 transition-all duration-300">
                 <Sparkles className="w-7 h-7 text-[#c9a962]" />
               </div>
-              <span className="text-sm font-medium text-white/80">Productos Premium</span>
+              <span className="text-sm font-medium text-white/80">Productos Orgánicos</span>
             </div>
             <div className="flex flex-col items-center gap-3 group">
               <div className="w-14 h-14 rounded-2xl bg-[#c9a962]/10 border border-[#c9a962]/20 flex items-center justify-center group-hover:scale-110 group-hover:bg-[#c9a962]/20 transition-all duration-300">

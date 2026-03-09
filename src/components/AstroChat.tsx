@@ -70,7 +70,7 @@ export default function AstroChat() {
     '¿Qué es Atomy?',
     '¿Cómo gano dinero?',
     '¿Cuáles son los productos?',
-    '¿Cómo me registro?'
+    '¿Cómo obtengo mi membresía?'
   ];
 
   return (
@@ -79,8 +79,8 @@ export default function AstroChat() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={`fixed bottom-6 right-6 w-16 h-16 rounded-full shadow-2xl flex items-center justify-center z-50 transition-all duration-500 ${isOpen
-            ? 'bg-slate-700 rotate-0'
-            : 'bg-gradient-to-r from-cyan-500 to-teal-500 hover:scale-110 hover:rotate-12'
+          ? 'bg-slate-700 rotate-0'
+          : 'bg-gradient-to-r from-cyan-500 to-teal-500 hover:scale-110 hover:rotate-12'
           }`}
       >
         {isOpen ? (
@@ -95,8 +95,8 @@ export default function AstroChat() {
 
       {/* Chat Window */}
       <div className={`fixed bottom-24 right-6 w-[380px] max-w-[calc(100vw-48px)] bg-white rounded-3xl shadow-2xl z-40 overflow-hidden transition-all duration-500 ${isOpen
-          ? 'opacity-100 translate-y-0 pointer-events-auto'
-          : 'opacity-0 translate-y-4 pointer-events-none'
+        ? 'opacity-100 translate-y-0 pointer-events-auto'
+        : 'opacity-0 translate-y-4 pointer-events-none'
         }`}>
         {/* Header */}
         <div className="bg-gradient-to-r from-cyan-500 to-teal-500 p-4 text-white flex items-center justify-between">
@@ -173,8 +173,8 @@ export default function AstroChat() {
                   </div>
                 )}
                 <div className={`max-w-[75%] p-3 rounded-2xl ${msg.role === 'user'
-                    ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-white rounded-br-md'
-                    : 'bg-white text-slate-800 rounded-bl-md shadow-sm border border-slate-100'
+                  ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-white rounded-br-md'
+                  : 'bg-white text-slate-800 rounded-bl-md shadow-sm border border-slate-100'
                   }`}>
                   <p className="text-sm leading-relaxed">{msg.content}</p>
                 </div>

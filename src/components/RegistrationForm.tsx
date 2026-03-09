@@ -263,7 +263,7 @@ export default function RegistrationForm({ setCurrentView }: RegistrationFormPro
               <span className="bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">Atomy</span>!
             </h2>
             <p className="text-slate-400 mb-6">
-              Tu registro ha sido completado exitosamente. Un asesor se pondrá en contacto
+              Tu solicitud de membresía ha sido completada exitosamente. Un asesor se pondrá en contacto
               contigo para activar tu membresía gratuita.
             </p>
             <div className="bg-slate-900/50 rounded-2xl p-6 mb-6 text-left border border-slate-700/50">
@@ -317,7 +317,7 @@ export default function RegistrationForm({ setCurrentView }: RegistrationFormPro
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-cyan-500/10 to-teal-500/10 border border-cyan-500/20 mb-4">
             <UserPlus className="w-4 h-4 text-cyan-400" />
-            <span className="text-sm font-medium text-cyan-300">Registro de Miembro</span>
+            <span className="text-sm font-medium text-cyan-300">Solicitud de Membresía</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
             Únete a{' '}
@@ -325,7 +325,7 @@ export default function RegistrationForm({ setCurrentView }: RegistrationFormPro
               Atomy
             </span>
           </h1>
-          <p className="text-slate-400">Completa tu registro en 6 sencillos pasos</p>
+          <p className="text-slate-400">Completa tu solicitud en 6 sencillos pasos</p>
         </div>
 
         {/* Progress bar */}

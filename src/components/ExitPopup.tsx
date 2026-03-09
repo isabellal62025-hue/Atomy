@@ -124,7 +124,7 @@ export default function ExitPopup({ setCurrentView }: ExitPopupProps) {
                   <Zap className="w-6 h-6 text-[#c9a962]" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white">Productos Premium Coreanos</h3>
+                  <h3 className="font-semibold text-white">Productos Orgánicos Coreanos</h3>
                   <p className="text-sm text-white/60">Tecnología de punta a tu alcance</p>
                 </div>
               </div>

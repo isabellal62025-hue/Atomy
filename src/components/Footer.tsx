@@ -65,8 +65,8 @@ export default function Footer({ setCurrentView, setProductCategory }: FooterPro
 
 
   const trustItems = [
-    { icon: Shield, label: 'Registro Seguro' },
-    { icon: Award, label: 'Calidad Premium' },
+    { icon: Shield, label: 'Membresía Segura' },
+    { icon: Award, label: 'Productos Orgánicos' },
     { icon: Clock, label: 'Soporte 24/7' },
     { icon: Heart, label: 'Comunidad Global' },
   ];
@@ -87,7 +87,7 @@ export default function Footer({ setCurrentView, setProductCategory }: FooterPro
               </span>
             </div>
             <p className="text-slate-400 mb-6 leading-relaxed text-sm">
-              Transformando vidas a través de productos premium y oportunidades de negocio
+              Transformando vidas a través de productos orgánicos y oportunidades de negocio
               que democratizan el éxito financiero.
             </p>
             <div className="flex gap-3">

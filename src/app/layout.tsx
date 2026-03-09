@@ -22,10 +22,10 @@ export const metadata: Metadata = {
     default: "Atomy | Tu Camino hacia el Bienestar y Éxito Financiero",
     template: "%s | Atomy Latinoamérica"
   },
-  description: "Atomy - Líder global en productos de bienestar con tecnología coreana. Únete a nuestra comunidad de más de 10 millones de miembros en 27+ países. Calidad premium, precios accesibles y oportunidad de ingresos residuales sin compras obligatorias.",
+  description: "Atomy - Líder global en productos de bienestar con tecnología coreana. Únete a nuestra comunidad de más de 16 millones de personas en + 52 Países. Productos Orgánicos de uso diario con tecnología Coreana a precios accesibles e Ingresos Residuales.",
   keywords: [
     "Atomy",
-    "productos Atomy",
+    "productos orgánicos Atomy",
     "bienestar",
     "salud",
     "cuidado de la piel",
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     "higiene personal",
     "cosméticos",
     "Atomy Latinoamérica",
-    "registro Atomy"
+    "membresía Atomy"
   ],
   authors: [{ name: "Atomy Latinoamérica", url: "https://atomy.com" }],
   creator: "Atomy",
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
     url: "https://atomy.com",
     siteName: "Atomy Latinoamérica",
     title: "Atomy | Tu Camino hacia el Bienestar y Éxito Financiero",
-    description: "Únete a más de 10 millones de miembros en 27+ países. Productos premium con tecnología coreana a precios accesibles. Oportunidad de ingresos residuales.",
+    description: "Únete a más de 16 millones de personas en + 52 Países. Productos Orgánicos de uso diario con tecnología Coreana a precios accesibles e Ingresos Residuales.",
     images: [
       {
         url: "/og-image.jpg",
@@ -79,7 +79,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Atomy | Bienestar y Oportunidad de Negocio",
-    description: "Productos premium con tecnología coreana. Únete a 10M+ miembros en 27+ países.",
+    description: "Únete a más de 16 millones de personas en + 52 Países. Productos Orgánicos de uso diario con tecnología Coreana a precios accesibles e Ingresos Residuales.",
     images: ["/og-image.jpg"],
     creator: "@atomy",
   },

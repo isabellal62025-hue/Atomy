@@ -35,7 +35,7 @@ const categoriasConfig: Record<string, {
     icon: SparkleIcon,
     color: 'from-pink-500 to-rose-500',
     bgGradient: 'from-pink-500/20 via-rose-500/10 to-transparent',
-    descripcion: 'Descubre nuestra línea de belleza premium con tecnología coreana',
+    descripcion: 'Descubre nuestra línea de belleza orgánica con tecnología coreana',
     shopUrl: 'https://us.atomy.com/product/beauty'
   },
   'cuidado-personal': {
@@ -150,7 +150,7 @@ export default function ProductsCategoryPage({ categoryId, setCurrentView }: Pro
             </div>
             <div className="flex items-center gap-2 px-4 py-2 bg-slate-800/50 rounded-full border border-slate-700/50">
               <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-              <span className="text-sm text-slate-300">Calidad Premium</span>
+              <span className="text-sm text-slate-300">Calidad Orgánica</span>
             </div>
             <div className="flex items-center gap-2 px-4 py-2 bg-slate-800/50 rounded-full border border-slate-700/50">
               <Sparkles className="w-4 h-4 text-cyan-400" />
@@ -247,7 +247,7 @@ export default function ProductsCategoryPage({ categoryId, setCurrentView }: Pro
               ¿Quieres precios especiales?
             </h3>
             <p className="text-slate-400 mb-4 text-sm">
-              Regístrate gratis y accede a descuentos exclusivos para miembros.
+              Obtén tu membresía gratis y accede a descuentos exclusivos para miembros.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Button
@@ -256,7 +256,7 @@ export default function ProductsCategoryPage({ categoryId, setCurrentView }: Pro
                 className="bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600"
               >
                 <Sparkles className="w-4 h-4 mr-2" />
-                Registrarme Gratis
+                Membresía Gratis
               </Button>
               <a
                 href={(categoria as any).shopUrl}

@@ -33,11 +33,11 @@ export async function POST(request: NextRequest) {
       3. Mantén un tono EXTREMADAMENTE PROFESIONAL, PERSUASIVO y ENFOCADO EN EL ÉXITO.
       
       ESTRATEGIA DE CIERRE:
-      - Si el usuario busca productos -> Enfócate en CALIDAD ABSOLUTA a PRECIO ABSOLUTO (Estrategia Masstige).
+      - Si el usuario busca productos -> Enfócate en CALIDAD ABSOLUTA a PRECIO ABSOLUTO (Estrategia Masstige) con PRODUCTOS ORGÁNICOS.
       - Si el usuario busca negocio -> Enfócate en SIN CUOTAS, SIN RIESGOS, PUNTOS QUE NUNCA VENCEN y expansión global.
-      - CIERRE MAESTRO: Siempre recuerda que el REGISTRO ES 100% GRATIS.
+      - CIERRE MAESTRO: Siempre recuerda que la MEMBRESÍA ES 100% GRATIS.
       
-      DATOS PARA REGISTRO:
+      DATOS PARA MEMBRESÍA:
       - Patrocinador: Hlopez
       - Código: 20669704
       
